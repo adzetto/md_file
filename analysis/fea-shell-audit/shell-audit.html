@@ -1,0 +1,1032 @@
+<title>Rotation-Free Shell Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#F3F4F1; --surface:#FFFFFF; --surface-2:#EDEFEA;
+  --ink:#14181A; --ink-2:#596466; --ink-3:#8A9395;
+  --rule:#D8DCD6; --rule-soft:#E6E9E3;
+  --accent:#17554F; --accent-soft:#DCEAE7;
+  --sev-hi:#9E1230; --sev-mid:#9C5B00; --ok:#2B6B3F;
+  --sev-hi-bg:#F7E3E7; --sev-mid-bg:#F7EBD9; --ok-bg:#E1EFE4;
+  --code-bg:#EDEFEA;
+  --shadow:0 1px 2px rgba(20,24,26,.05), 0 8px 24px -16px rgba(20,24,26,.25);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111518; --surface:#181D20; --surface-2:#1E2428;
+    --ink:#E7EBE8; --ink-2:#9BA6A7; --ink-3:#798486;
+    --rule:#293136; --rule-soft:#222A2E;
+    --accent:#63CFC0; --accent-soft:#16302E;
+    --sev-hi:#FF8DA0; --sev-mid:#E8B45A; --ok:#78D293;
+    --sev-hi-bg:#33161D; --sev-mid-bg:#2E2413; --ok-bg:#172C1E;
+    --code-bg:#1C2226;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111518; --surface:#181D20; --surface-2:#1E2428;
+  --ink:#E7EBE8; --ink-2:#9BA6A7; --ink-3:#798486;
+  --rule:#293136; --rule-soft:#222A2E;
+  --accent:#63CFC0; --accent-soft:#16302E;
+  --sev-hi:#FF8DA0; --sev-mid:#E8B45A; --ok:#78D293;
+  --sev-hi-bg:#33161D; --sev-mid-bg:#2E2413; --ok-bg:#172C1E;
+  --code-bg:#1C2226;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1010px; margin:0 auto; padding:0 30px 120px}
+p,li{max-width:72ch}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--rule)}
+a:hover{border-bottom-color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+h1,h2,h3,h4{font-family:Spectral,Georgia,"Times New Roman",serif; text-wrap:balance; margin:0}
+h1{font-weight:700; font-size:clamp(2.1rem,4.6vw,3.15rem); line-height:1.08; letter-spacing:-.015em}
+h2{font-weight:600; font-size:clamp(1.5rem,2.6vw,1.9rem); line-height:1.2; letter-spacing:-.01em}
+h3{font-weight:600; font-size:1.16rem; line-height:1.3}
+h4{font-weight:600; font-size:1rem; line-height:1.35}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:500;
+}
+code,kbd,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+code{background:var(--code-bg); padding:.1em .34em; border-radius:3px; font-size:.87em}
+pre{
+  background:var(--code-bg); border:1px solid var(--rule-soft); border-radius:6px;
+  padding:14px 16px; overflow-x:auto; font-size:.82rem; line-height:1.55; margin:0;
+}
+pre code{background:none; padding:0; font-size:1em}
+
+/* ---------- masthead ---------- */
+header.mast{
+  border-bottom:1px solid var(--rule);
+  padding:56px 0 30px; margin-bottom:40px;
+}
+.mast .kicker{display:flex; flex-wrap:wrap; gap:10px 20px; align-items:baseline; margin-bottom:20px}
+.mast h1{margin-bottom:16px}
+.standfirst{font-size:1.09rem; color:var(--ink-2); max-width:66ch}
+.mast-meta{
+  display:grid; gap:2px 34px; margin-top:28px;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  font-size:.82rem;
+}
+.mast-meta div{border-top:1px solid var(--rule); padding-top:8px}
+.mast-meta dt{color:var(--ink-3); font-family:"IBM Plex Mono",monospace; font-size:.68rem;
+  letter-spacing:.13em; text-transform:uppercase; margin-bottom:3px}
+.mast-meta dd{margin:0; color:var(--ink)}
+
+/* ---------- section ---------- */
+section{margin:0 0 54px}
+.sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:6px; flex-wrap:wrap}
+.sec-head .num{
+  font-family:"IBM Plex Mono",monospace; font-size:.8rem; color:var(--accent);
+  font-weight:600; letter-spacing:.06em;
+}
+.lede{color:var(--ink-2); margin:10px 0 26px}
+
+/* ---------- finding card ---------- */
+.finding{
+  background:var(--surface); border:1px solid var(--rule);
+  border-radius:8px; margin:0 0 18px; overflow:hidden; box-shadow:var(--shadow);
+}
+.finding > .bar{height:3px; width:100%}
+.bar.hi{background:var(--sev-hi)} .bar.mid{background:var(--sev-mid)} .bar.ok{background:var(--ok)}
+.finding .body{padding:20px 22px 22px}
+.f-head{display:flex; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+.f-id{
+  font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.78rem;
+  color:var(--ink-3); padding-top:.28em; letter-spacing:.04em;
+}
+.f-head h3{flex:1 1 340px}
+.chip{
+  font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.11em;
+  text-transform:uppercase; font-weight:600; padding:.32em .6em; border-radius:3px;
+  white-space:nowrap; align-self:flex-start; margin-top:.2em;
+}
+.chip.hi{background:var(--sev-hi-bg); color:var(--sev-hi)}
+.chip.mid{background:var(--sev-mid-bg); color:var(--sev-mid)}
+.chip.ok{background:var(--ok-bg); color:var(--ok)}
+.loc{
+  font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--ink-2);
+  margin:2px 0 14px; display:block;
+}
+.finding p{margin:0 0 12px}
+.finding p:last-child{margin-bottom:0}
+
+/* ---------- evidence readout ---------- */
+.ev{
+  margin:16px 0 4px; border:1px solid var(--rule-soft); border-radius:6px;
+  background:var(--surface-2); overflow:hidden;
+}
+.ev-h{
+  font-family:"IBM Plex Mono",monospace; font-size:.65rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); padding:8px 14px 6px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.ev-rows{padding:10px 14px 12px; display:grid; gap:9px}
+.ev-row{display:grid; grid-template-columns:minmax(140px,1.4fr) minmax(120px,2fr) 84px; gap:12px; align-items:center}
+.ev-lab{font-size:.79rem; color:var(--ink-2); line-height:1.35}
+.ev-val{
+  font-family:"IBM Plex Mono",monospace; font-size:.79rem; font-weight:600;
+  text-align:right; font-variant-numeric:tabular-nums;
+}
+.scale{position:relative; height:9px; background:var(--rule-soft); border-radius:2px; overflow:hidden}
+.scale i{position:absolute; top:0; bottom:0; left:0; display:block; border-radius:2px}
+.scale i.hi{background:var(--sev-hi)} .scale i.mid{background:var(--sev-mid)} .scale i.ok{background:var(--ok)}
+.scale b{position:absolute; top:-2px; bottom:-2px; width:1px; background:var(--ink-3); opacity:.5}
+.ev-key{ /* values below 1e-10 render as a minimum sliver */
+  
+  font-family:"IBM Plex Mono",monospace; font-size:.62rem; color:var(--ink-3);
+  padding:0 14px 10px; letter-spacing:.03em;
+}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; margin:18px 0; border:1px solid var(--rule); border-radius:6px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:.83rem}
+th,td{padding:8px 13px; text-align:left; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{
+  font-family:"IBM Plex Mono",monospace; font-size:.65rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500;
+  background:var(--surface-2); border-bottom:1px solid var(--rule); white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap}
+td.m{font-family:"IBM Plex Mono",monospace; font-size:.94em; white-space:nowrap}
+caption{caption-side:bottom; text-align:left; padding:9px 13px; font-size:.76rem; color:var(--ink-3); border-top:1px solid var(--rule-soft)}
+.good{color:var(--ok); font-weight:600}
+.bad{color:var(--sev-hi); font-weight:600}
+.warn{color:var(--sev-mid); font-weight:600}
+
+/* ---------- misc blocks ---------- */
+.callout{
+  border-left:3px solid var(--accent); background:var(--accent-soft);
+  padding:14px 18px; border-radius:0 6px 6px 0; margin:18px 0;
+}
+.callout p{margin:0; max-width:64ch}
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin:20px 0}
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:8px; padding:18px 20px}
+.panel h4{margin-bottom:8px}
+.panel p:last-child{margin-bottom:0}
+ul.tight{margin:8px 0 0; padding-left:20px}
+ul.tight li{margin-bottom:6px}
+hr.soft{border:none; border-top:1px solid var(--rule); margin:44px 0}
+.fixnum{
+  font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent);
+  font-size:.8rem;
+}
+footer.end{border-top:1px solid var(--rule); margin-top:56px; padding-top:22px; color:var(--ink-3); font-size:.82rem}
+@media (max-width:640px){
+  .wrap{padding:0 18px 80px}
+  .ev-row{grid-template-columns:1fr 70px; grid-template-areas:"lab val" "sca sca"}
+  .ev-lab{grid-area:lab} .ev-val{grid-area:val} .scale{grid-area:sca}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">
+    <span class="eyebrow">Code and theory audit</span>
+    <span class="eyebrow">Fluid_Structure_Program · 30 modules · 6 977 lines</span>
+  </div>
+  <h1>Rotation-free shell code: what is wrong, what is right, and how fast it could be</h1>
+  <p class="standfirst">A line-level review of the six-node rotation-free Kirchhoff&ndash;Love triangle,
+  its geometric stiffness, its boundary treatment, its crease penalty, and its benchmark suite.
+  Every number below came from running the code, not from reading it.</p>
+  <dl class="mast-meta">
+    <div><dt>Element</dt><dd>6-node patch, CST membrane, quadratic-fit curvature</dd></div>
+    <div><dt>Defects confirmed</dt><dd>9 formulation, 5 driver</dd></div>
+    <div><dt>Verified correct</dt><dd>7 subsystems</dd></div>
+    <div><dt>Measured headroom</dt><dd>43&times; per Newton iteration</dd></div>
+  </dl>
+</header>
+
+<section>
+  <div class="sec-head"><span class="num">00</span><h2>How this was checked</h2></div>
+  <p class="lede">Reading a hand-derived tangent stiffness does not tell you whether it is right. Differentiating it does.</p>
+
+  <p>Every claim in this report rests on one of four kinds of executable check, run against the
+  uploaded source with no modification to it:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Check</th><th>What it settles</th><th>How a wrong belief shows up</th></tr></thead>
+    <tbody>
+      <tr><td>Central finite difference of the code's own quantities</td><td>Whether <code>B_m</code>, <code>B_b</code>, <code>Y</code>, <code>K_e</code>, <code>F_p</code>, <code>K_p</code> are the derivatives they are supposed to be</td><td>Relative error stops at 10<sup>-2</sup> instead of 10<sup>-10</sup></td></tr>
+      <tr><td>Manufactured solution</td><td>Whether the discrete bending energy converges to the Kirchhoff energy</td><td>Ratio to exact does not approach 1 as <em>h</em> falls</td></tr>
+      <tr><td>Closed-form plate solutions</td><td>Whether the assembled operator solves the right problem</td><td>The FE answer converges to the wrong number</td></tr>
+      <tr><td>The repository's own benchmark data</td><td>Whether the shipped drivers reproduce the shipped results</td><td>The curve does not land on the reference</td></tr>
+    </tbody>
+  </table>
+  <caption>Scripts for all four are listed in section 06 and are committed alongside this report.</caption>
+  </div>
+
+  <div class="callout">
+    <p>One measurement decides most of what follows. On the code's own cantilever mesh, driven by
+    the code's own solver to 30&nbsp;% of full load, the assembled internal force differs from the gradient
+    of the assembled strain energy by <strong>16.3&nbsp;%</strong>. A Newton solve that converges to
+    <code>||R|| = 5.8&times;10<sup>-10</sup></code> is therefore converging to the solution of a
+    slightly different problem than the one the element's kinematics define.</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section>
+  <div class="sec-head"><span class="num">01</span><h2>Formulation defects</h2></div>
+  <p class="lede">Nine findings, ordered by what they cost. The first three share one root cause and
+  one fix.</p>
+
+  <!-- F1 -->
+  <article class="finding">
+    <div class="bar hi"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F1</span>
+        <h3>The bending B-matrix is built from the reference parametrisation while the strain it differentiates uses the current one</h3>
+        <span class="chip hi">Wrong answer</span>
+      </div>
+      <span class="loc">shell_element.py:76 &nbsp;·&nbsp; shell_patch_kinematics.py:134</span>
+
+      <p><code>shell_patch_kinematics</code> forms the current curvature as
+      <code>c_curr = S @ Tinv_curr @ z_curr</code>, using the quadratic-fit matrix evaluated on the
+      <em>deformed</em> patch. <code>shell_element_routine</code> then hands
+      <code>Tinv = kin['Tinv_ref']</code> to <code>B1_matrix</code> and <code>B_b_matrix</code>, together with
+      <code>xi_curr</code>, <code>eta_curr</code> and <code>z_curr</code>. The resulting operator is a hybrid that
+      differentiates neither the frozen-reference curvature nor the convected one.</p>
+
+      <p>At zero displacement the two coincide, so a linear analysis is unaffected. The error grows
+      with the total displacement measured from the reference state, which is exactly the regime the
+      large-deflection benchmarks live in.</p>
+
+      <div class="ev">
+        <div class="ev-h">Relative error of B_b against a central difference of Eb, flat patch</div>
+        <div class="ev-rows">
+          <div class="ev-row"><span class="ev-lab">u = 0</span><span class="scale"><i class="ok" style="width:2.0%"></i><b style="left:80%"></b></span><span class="ev-val">6.6e-15</span></div>
+          <div class="ev-row"><span class="ev-lab">u = 10<sup>-3</sup> &middot; patch size</span><span class="scale"><i class="mid" style="width:75.8%"></i><b style="left:80%"></b></span><span class="ev-val">3.8e-03</span></div>
+          <div class="ev-row"><span class="ev-lab">u = 10<sup>-2</sup> &middot; patch size</span><span class="scale"><i class="hi" style="width:83.1%"></i><b style="left:80%"></b></span><span class="ev-val">1.9e-02</span></div>
+          <div class="ev-row"><span class="ev-lab">u = 10<sup>-1</sup> &middot; patch size</span><span class="scale"><i class="hi" style="width:96.4%"></i><b style="left:80%"></b></span><span class="ev-val">4.4e-01</span></div>
+          <div class="ev-row"><span class="ev-lab">same, with <code>Tinv_curr</code> substituted</span><span class="scale"><i class="mid" style="width:82.5%"></i><b style="left:80%"></b></span><span class="ev-val">1.8e-02</span></div>
+        </div>
+        <div class="ev-key">log scale, 1e-10 (the finite-difference floor) to 1e0. Tick marks 1 %.</div>
+      </div>
+
+      <p><strong>Fix.</strong> Use <code>kin['Tinv_curr']</code> at <code>shell_element.py:76</code>, or change
+      <code>shell_patch_kinematics.py:134</code> to build <code>c_curr</code> from <code>Tinv_ref</code>. The two
+      choices are different elements; they are not both defensible at once. Substituting
+      <code>Tinv_curr</code> alone drops the residual error by a factor of 24 at 10&nbsp;% displacement, and
+      what remains is F2.</p>
+    </div>
+  </article>
+
+  <!-- F2 -->
+  <article class="finding">
+    <div class="bar hi"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F2</span>
+        <h3>H1 omits the rotation of the contravariant basis with the surface normal</h3>
+        <span class="chip hi">Wrong answer</span>
+      </div>
+      <span class="loc">bending_matrices.py:33&ndash;80 (<code>H1_matrix</code>)</span>
+
+      <p>The patch coordinate of neighbour <em>i</em> is
+      <code>&xi;<sub>i</sub> = &xi;<sub>i</sub><sup>0</sup> + b<sub>i</sub>&middot;a<sup>1</sup></code>,
+      so its variation is
+      <code>&delta;b<sub>i</sub>&middot;a<sup>1</sup> + b<sub>i</sub>&middot;&delta;a<sup>1</sup></code>.
+      Decomposing <code>&delta;a<sup>&alpha;</sup></code> in the local frame gives three terms: two
+      tangential ones, which the code carries as the <code>k</code> and <code>-l</code> coefficients, and one
+      normal one, <code>&minus;z<sub>i</sub>(a<sup>&alpha;</sup>&middot;&delta;n)</code>, which is absent.</p>
+
+      <p>That term is proportional to <code>z<sub>i</sub></code>, the out-of-plane offset of the neighbour
+      from the plane of the primary triangle. It vanishes identically on a flat undeformed patch,
+      which is why the omission survives a flat-plate check. On the cantilever mesh at 30&nbsp;% load,
+      <code>|z<sub>i</sub>|</code> reaches 21&nbsp;% of the element size.</p>
+
+      <div class="ev">
+        <div class="ev-h">B_b error against central difference, Tinv_curr already substituted</div>
+        <div class="ev-rows">
+          <div class="ev-row"><span class="ev-lab">curved patch, u = 0, as coded</span><span class="scale"><i class="hi" style="width:87.5%"></i><b style="left:80%"></b></span><span class="ev-val">5.6e-02</span></div>
+          <div class="ev-row"><span class="ev-lab">same, missing term restored</span><span class="scale"><i class="ok" style="width:7.5%"></i><b style="left:80%"></b></span><span class="ev-val">5.6e-10</span></div>
+          <div class="ev-row"><span class="ev-lab">flat patch, u = 10<sup>-1</sup>, as coded</span><span class="scale"><i class="hi" style="width:87.5%"></i><b style="left:80%"></b></span><span class="ev-val">5.7e-02</span></div>
+          <div class="ev-row"><span class="ev-lab">same, missing term restored</span><span class="scale"><i class="ok" style="width:7.0%"></i><b style="left:80%"></b></span><span class="ev-val">5.0e-10</span></div>
+        </div>
+        <div class="ev-key">restoring one term takes the operator from percent-level to machine precision</div>
+      </div>
+
+      <p><strong>Fix.</strong> Add to each row of <code>H1</code>, for the columns belonging to
+      <code>&delta;b<sub>2</sub></code> and <code>&delta;b<sub>3</sub></code>,
+      the contribution <code>+z<sub>i</sub>(a<sup>&alpha;</sup> P M<sub>1</sub>)/L</code> and
+      <code>+z<sub>i</sub>(a<sup>&alpha;</sup> P M<sub>2</sub>)/L</code> respectively, with
+      <code>P = I &minus; n&otimes;n</code>, <code>L = |a<sub>1</sub>&times;a<sub>2</sub>|</code> and
+      <code>M<sub>&alpha;</sub></code> the existing <code>cross_matrix(a<sub>&alpha;</sub>)</code>. The same
+      projector already appears in <code>B2_matrix</code>, which linearises
+      <code>z<sub>i</sub> = b<sub>i</sub>&middot;n</code> correctly.</p>
+    </div>
+  </article>
+
+  <!-- F3 -->
+  <article class="finding">
+    <div class="bar hi"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F3</span>
+        <h3>The consequence: the internal force is not the gradient of the strain energy</h3>
+        <span class="chip hi">Wrong answer</span>
+      </div>
+      <span class="loc">system level, measured on Cantilever_2e_NC_Sym2</span>
+
+      <p><code>B_b</code> is used for the internal force as well as for the tangent. An inexact tangent
+      costs Newton iterations; an inexact force moves the converged solution. F1 and F2 do both.</p>
+
+      <p>Measured on the shipped 80-element cantilever, driven by the code's own assembly and solver
+      to a residual of <code>5.8&times;10<sup>-10</sup></code> at 30&nbsp;% of full load
+      (tip deflection <em>w/L</em> = 0.73):</p>
+
+      <div class="tw">
+      <table>
+        <thead><tr><th>Quantity</th><th class="n">Value</th><th>Reading</th></tr></thead>
+        <tbody>
+          <tr><td class="m">||F_int||</td><td class="n">1.6534e-05</td><td>assembled internal force, free DOFs</td></tr>
+          <tr><td class="m">||dW/dU||</td><td class="n">1.6759e-05</td><td>numerical gradient of the assembled strain energy</td></tr>
+          <tr><td class="m">||F_int &minus; dW/dU|| / ||dW/dU||</td><td class="n bad">16.3 %</td><td>the equilibrium actually solved is not the variational one</td></tr>
+          <tr><td class="m">||K &minus; dF_int/dU|| / ||dF_int/dU||</td><td class="n bad">3.9 %</td><td>assembled tangent versus its own numerical Jacobian</td></tr>
+          <tr><td class="m">asym(K)</td><td class="n bad">5.5 %</td><td>true Jacobian is symmetric to 1.0e-03</td></tr>
+          <tr><td class="m">min eig(sym K)</td><td class="n bad">&minus;2.686e-03</td><td>indefinite tangent on a stable rising branch</td></tr>
+          <tr><td class="m">max ||Tinv_ref &minus; Tinv_curr|| / ||Tinv_curr||</td><td class="n">1.5 %</td><td>size of the F1 term on this mesh</td></tr>
+          <tr><td class="m">max |z<sub>i</sub>| / element size</td><td class="n">21.4 %</td><td>size of the F2 term on this mesh</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p>The 16&nbsp;% force error does not translate into a 16&nbsp;% deflection error, because most of it
+      projects onto stiff membrane directions rather than the soft bending direction that carries the
+      tip displacement. On the cantilever the resulting deflection error is about 3&nbsp;%
+      (section&nbsp;03). The tangent error is what makes the solver fail.</p>
+    </div>
+  </article>
+
+  <!-- F4 -->
+  <article class="finding">
+    <div class="bar hi"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F4</span>
+        <h3>The bending tangent is not the Jacobian of the bending force</h3>
+        <span class="chip hi">Convergence</span>
+      </div>
+      <span class="loc">bending_matrices.py:677&ndash;720 (<code>K_bending_geometric</code>) with <code>shell_element.py:155&ndash;159</code></span>
+
+      <p>Isolating the bending block <code>K_b = A(Bb<sup>T</sup> Hb Bb + Y<sup>T</sup> Kbg Y)</code>
+      and comparing it against a central difference of the bending force it is meant to differentiate:</p>
+
+      <div class="tw">
+      <table>
+        <thead><tr><th>Patch</th><th>Displacement</th><th class="n">rel. err(K_b, dF_b/dU)</th><th class="n">asym(K_b)</th></tr></thead>
+        <tbody>
+          <tr><td>flat</td><td>10<sup>-3</sup></td><td class="n warn">1.34e-02</td><td class="n">1.15e-03</td></tr>
+          <tr><td>flat</td><td>10<sup>-2</sup></td><td class="n bad">1.24e-01</td><td class="n">1.23e-02</td></tr>
+          <tr><td>flat</td><td>10<sup>-1</sup></td><td class="n bad">7.91e-01</td><td class="n">9.64e-02</td></tr>
+          <tr><td>curved</td><td>10<sup>-3</sup></td><td class="n warn">4.54e-02</td><td class="n">1.52e-03</td></tr>
+          <tr><td>curved</td><td>10<sup>-1</sup></td><td class="n bad">9.49e-01</td><td class="n">7.26e-02</td></tr>
+        </tbody>
+      </table>
+      <caption>The membrane block over the same range is exact to 6.7e-10 and symmetric to 4.1e-17, so the defect is confined to the bending path.</caption>
+      </div>
+
+      <p>Part of this follows from F1 and F2, since <code>K1</code>, <code>K2</code> and <code>K3</code> are built from
+      the same <code>B1</code>, <code>H1</code> and <code>Tinv</code>. Repairing F1 and F2 without also re-deriving
+      <code>K_bending_geometric</code> makes the tangent <em>less</em> consistent with the corrected force, not more,
+      because the geometric terms were derived for the uncorrected operator. Both halves have to move together.</p>
+
+      <p>The practical signature is in the iteration counts. On the cantilever the shipped code needs
+      8, 15, 17, 16 and 23 Newton iterations for the first five load steps of a smooth
+      problem where a consistent tangent would need three or four, and the residual falls linearly
+      rather than quadratically.</p>
+    </div>
+  </article>
+
+  <!-- F5 -->
+  <article class="finding">
+    <div class="bar mid"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F5</span>
+        <h3>The clamped-edge ghost transformation drops its dependence on the second edge node, and the disabled line has the wrong sign</h3>
+        <span class="chip mid">Latent</span>
+      </div>
+      <span class="loc">bending_matrices.py:211&ndash;222 (<code>apply_bending_edge_transformation</code>)</span>
+
+      <p>For a <code>'fixed'</code> edge the ghost sits at
+      <code>r<sub>J</sub> = r<sub>I</sub> + 2(n<sub>I</sub><sup>0</sup>&middot;(r<sub>F</sub>&minus;r<sub>I</sub>))n<sub>I</sub><sup>0</sup></code>
+      (<code>ghost.py:107</code>), whose exact linearisation has two blocks:
+      <code>&part;r<sub>J</sub>/&part;r<sub>I</sub> = I &minus; 2n&otimes;n</code> and
+      <code>&part;r<sub>J</sub>/&part;r<sub>F</sub> = +2n&otimes;n</code>. The code writes the first as
+      <code>RI</code> and applies it. The second is commented out at line 222, and the commented
+      definition at line 212 reads <code>RF = -2.0 * np.outer(N_I0, N_I0)</code>, which is the negative of
+      the correct block.</p>
+
+      <div class="ev">
+        <div class="ev-h">Y[ghost rows] against a central difference of the ghost position rule</div>
+        <div class="ev-rows">
+          <div class="ev-row"><span class="ev-lab"><code>'free'</code> edge, QI / QP / QF</span><span class="scale"><i class="ok" style="width:13.4%"></i><b style="left:80%"></b></span><span class="ev-val">2.0e-09</span></div>
+          <div class="ev-row"><span class="ev-lab"><code>'fixed'</code> edge, RI only</span><span class="scale"><i class="hi" style="width:98.8%"></i><b style="left:80%"></b></span><span class="ev-val">7.6e-01</span></div>
+        </div>
+        <div class="ev-key">the free-edge branch is an exact linearisation; the fixed branch is not</div>
+      </div>
+
+      <p>The omission is harmless in every benchmark in the archive, because those clamped edges restrain
+      all three translations at both edge nodes, so <code>&delta;r<sub>F</sub> = 0</code>. It becomes wrong the
+      moment a <code>'fixed'</code> rotational edge sits on nodes that can move: a symmetry plane, a partially
+      restrained support, or a displacement-controlled edge. It also perturbs the reported reactions,
+      which are read from <code>F_int</code> at prescribed DOFs in <code>maindriver_roof.py:327</code>.</p>
+
+      <p><strong>Fix.</strong> Restore the block with the correct sign:
+      <code>Y[3*ghost:3*ghost+3, 3*F:3*F+3] = 2.0 * np.outer(N_I0, N_I0)</code>. No second-derivative term is
+      needed, because <code>N_I0</code> is a reference quantity and the map is linear in the current coordinates.</p>
+    </div>
+  </article>
+
+  <!-- F6 -->
+  <article class="finding">
+    <div class="bar hi"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F6</span>
+        <h3>One transposed outer product makes the crease penalty tangent 50&nbsp;% wrong and 82&nbsp;% asymmetric</h3>
+        <span class="chip hi">One-line fix</span>
+      </div>
+      <span class="loc">constraint_penalty.py:92</span>
+
+      <p>The material part of the penalty tangent must equal <code>&kappa; g g<sup>T</sup></code>, where
+      <code>g = g<sub>1</sub> + g<sub>2</sub></code> is the constraint gradient the same function already
+      builds at lines 68&ndash;70. Expanding that outer product gives four blocks. Three of them match the
+      code. The fourth, <code>g<sub>2</sub> g<sub>1</sub><sup>T</sup></code>, requires
+      <code>np.outer(e1, e2)</code>; line 92 writes <code>np.outer(e2, e1)</code>.</p>
+
+      <pre><code>K_mat2 = (1.0 / (A1*A2)) * D2T @ P2.T @ np.outer(<span style="color:var(--sev-hi)">e2, e1</span>) @ P1 @ D1   # as written
+K_mat2 = (1.0 / (A1*A2)) * D2T @ P2.T @ np.outer(<span style="color:var(--ok)">e1, e2</span>) @ P1 @ D1   # required</code></pre>
+
+      <div class="ev">
+        <div class="ev-h">12&times;12 crease tangent against a central difference of F_p, 90&deg; fold</div>
+        <div class="ev-rows">
+          <div class="ev-row"><span class="ev-lab">as written, error</span><span class="scale"><i class="hi" style="width:97%"></i><b style="left:80%"></b></span><span class="ev-val">5.0e-01</span></div>
+          <div class="ev-row"><span class="ev-lab">as written, asymmetry</span><span class="scale"><i class="hi" style="width:99.1%"></i><b style="left:80%"></b></span><span class="ev-val">8.2e-01</span></div>
+          <div class="ev-row"><span class="ev-lab">one term corrected, error</span><span class="scale"><i class="ok" style="width:64.0%"></i><b style="left:80%"></b></span><span class="ev-val">2.5e-04</span></div>
+          <div class="ev-row"><span class="ev-lab">one term corrected, asymmetry</span><span class="scale"><i class="ok" style="width:65.4%"></i><b style="left:80%"></b></span><span class="ev-val">3.5e-04</span></div>
+          <div class="ev-row"><span class="ev-lab">K_mat alone vs <code>&kappa;gg<sup>T</sup></code> after the fix</span><span class="scale"><i class="ok" style="width:2.0%"></i><b style="left:80%"></b></span><span class="ev-val">2.4e-16</span></div>
+        </div>
+        <div class="ev-key">the same 5.0e-01 / 8.2e-01 pair appears at 30&deg; and 5&deg; folds</div>
+      </div>
+
+      <p>The remaining 2.5e-04 after the fix is the residual of the hand-derived geometric block
+      <code>H_total</code>, which is otherwise accurate to 4.8e-03 in its own norm. The penalty
+      <em>force</em> <code>F_p</code> is already the exact gradient of the penalty energy, verified to 1.1e-11,
+      so the crease constraint converges to the right configuration; only the rate suffers.</p>
+
+      <p>All three drivers that use creases set <code>kappa = 100</code> and none of them can currently run,
+      for the separate reason in F12, so this defect has probably never been observed.</p>
+    </div>
+  </article>
+
+  <!-- F7 -->
+  <article class="finding">
+    <div class="bar mid"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F7</span>
+        <h3>The crease penalty is written on the cosine of the fold angle, so its stiffness varies by two orders of magnitude with the fold</h3>
+        <span class="chip mid">Modelling</span>
+      </div>
+      <span class="loc">constraint_penalty.py:64&ndash;73</span>
+
+      <p>The stored energy is <code>&frac12;&kappa;(cos&theta;<sub>0</sub> &minus; cos&theta;)&sup2;</code>.
+      Expanding about <code>&theta;<sub>0</sub></code> gives
+      <code>&frac12;&kappa;sin&sup2;&theta;<sub>0</sub>(&theta;&minus;&theta;<sub>0</sub>)&sup2;</code>, so the
+      effective rotational stiffness of the hinge is <code>&kappa;sin&sup2;&theta;<sub>0</sub></code>, not
+      <code>&kappa;</code>. Creases are created in <code>mesh.py:106</code> whenever the dihedral angle exceeds
+      <code>angle_tol_deg = 5</code>, so <code>sin&sup2;&theta;<sub>0</sub></code> ranges from 0.0076 at a 5&deg;
+      fold to 1.0 at 90&deg;. A single <code>kappa = 100</code> therefore represents a hinge that is up to 130
+      times stiffer on a box corner than on a shallow crease.</p>
+
+      <p>Two further consequences follow from using the cosine. It is even in the fold angle, so the
+      constraint cannot distinguish <code>+&theta;</code> from <code>&minus;&theta;</code> and a crease can invert
+      through the flat state at no energy cost. And the leading term vanishes at
+      <code>&theta;<sub>0</sub> = 0</code> and <code>&theta;<sub>0</sub> = &pi;</code>, where the penalty becomes
+      quartic and effectively free.</p>
+
+      <p><strong>Fix.</strong> Penalise the angle itself, <code>&frac12;&kappa;(&theta;&minus;&theta;<sub>0</sub>)&sup2;</code>
+      with <code>&theta; = atan2((n<sub>1</sub>&times;n<sub>2</sub>)&middot;e, n<sub>1</sub>&middot;n<sub>2</sub>)</code>
+      along the hinge axis <code>e</code>, which is signed and has uniform stiffness. Scale <code>&kappa;</code> by
+      the hinge length so the result is mesh independent; as written, refining the mesh multiplies the
+      total hinge stiffness by the number of edges along the crease.</p>
+    </div>
+  </article>
+
+  <!-- F8 -->
+  <article class="finding">
+    <div class="bar hi"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F8</span>
+        <h3>The free-edge ghost condition depends on how the quads were split, and on one common triangulation the solution converges to the wrong answer</h3>
+        <span class="chip hi">Wrong answer</span>
+      </div>
+      <span class="loc">ghost.py:3&ndash;7 with bending_matrices.py:215&ndash;218; shape_functions.py basis</span>
+
+      <p>A free edge is treated by mirroring the opposite vertex about the edge, in the current element
+      plane, so the ghost carries <code>z = 0</code> by construction. Substituting that into the quadratic fit
+      <code>z = v<sub>1</sub>(&xi;&sup2;&minus;&xi;) + v<sub>2</sub>(&eta;&sup2;&minus;&eta;) + v<sub>3</sub>&xi;&eta;</code>
+      annihilates whichever coefficient the mirror's parametric position happens to select. Which
+      coefficient that is depends on the mirror's <code>(&xi;,&eta;)</code>, and therefore on the shape and
+      orientation of the boundary triangle rather than on the edge normal.</p>
+
+      <p>The consequence is measurable. A simply supported square plate under uniform pressure, solved
+      linearly, converges cleanly on a structured right-triangle mesh and converges to a value 33.6&nbsp;%
+      too large on a union-jack mesh, which is the same grid with alternating diagonals:</p>
+
+      <div class="tw">
+      <table>
+        <thead><tr><th>Mesh</th><th class="n">8&times;8</th><th class="n">16&times;16</th><th class="n">24&times;24</th><th class="n">32&times;32</th></tr></thead>
+        <tbody>
+          <tr><td>structured right-triangle, error in <em>w</em><sub>max</sub></td><td class="n good">&minus;0.13 %</td><td class="n good">+0.01 %</td><td class="n good">+0.04 %</td><td class="n good">+0.05 %</td></tr>
+          <tr><td>union-jack alternating, error in <em>w</em><sub>max</sub></td><td class="n bad">+36.75 %</td><td class="n bad">+34.21 %</td><td class="n bad">+33.76 %</td><td class="n bad">+33.61 %</td></tr>
+        </tbody>
+      </table>
+      <caption>Reference: <em>w</em><sub>max</sub> = 0.00406 <em>qL</em><sup>4</sup>/<em>D</em> (Timoshenko and Woinowsky-Krieger). Load kept at 10<sup>-6</sup> so the response is linear.</caption>
+      </div>
+
+      <p>The union-jack solution is smooth, not oscillatory: its second difference along the centre line
+      decays as <em>h</em>&sup2; exactly like the structured one, so this is not a spurious mode. The interior
+      operator is not at fault either. A manufactured-solution test that imposes an exact deflection field
+      and compares the assembled discrete bending energy against the Kirchhoff energy gives, on interior
+      elements and across six different imposed fields, ratios to exact between 0.9949 and 1.0002 at
+      32&times;32 on <em>both</em> topologies, converging as <em>h</em>&sup2;. Including the boundary ring the
+      full-domain ratio is 0.9746 at 8&times;8 and 0.9993 at 48&times;48, again identical for the two
+      topologies. The interior is consistent; the boundary treatment is what does not converge.</p>
+
+      <div class="callout">
+        <p>Practical reading: results from this element are only trustworthy on meshes whose boundary
+        triangles all present the same local edge to the free boundary. Every mesh generator in the
+        archive happens to satisfy that. An imported Abaqus mesh through <code>read_abaqus_inp</code>
+        need not, and nothing in the code checks or warns.</p>
+      </div>
+
+      <p><strong>Fix.</strong> Replace the geometric mirror with the condition it is standing in for.
+      For a free edge the requirement is <code>M<sub>nn</sub> = 0</code>, that is
+      <code>&kappa;<sub>nn</sub> + &nu;&kappa;<sub>ss</sub> = 0</code> with <em>n</em> the edge normal.
+      Impose that as an explicit linear constraint on <code>(v<sub>1</sub>, v<sub>2</sub>, v<sub>3</sub>)</code>
+      expressed in the edge frame, so the condition is a property of the edge and not of the local node
+      numbering.</p>
+    </div>
+  </article>
+
+  <!-- F9 -->
+  <article class="finding">
+    <div class="bar mid"></div>
+    <div class="body">
+      <div class="f-head">
+        <span class="f-id">F9</span>
+        <h3>Clamped edges converge at roughly first order and are the accuracy bottleneck of the plate benchmark</h3>
+        <span class="chip mid">Accuracy</span>
+      </div>
+      <span class="loc">ghost.py:90&ndash;108, mesh.py:256&ndash;291</span>
+
+      <p>Under the same linear plate test, with the same structured mesh and the same element, the two
+      edge treatments behave very differently:</p>
+
+      <div class="tw">
+      <table>
+        <thead><tr><th>Edge treatment</th><th class="n">8&times;8</th><th class="n">12&times;12</th><th class="n">16&times;16</th><th class="n">24&times;24</th><th>Observed rate</th></tr></thead>
+        <tbody>
+          <tr><td>simply supported (mirrored ghost)</td><td class="n good">&minus;0.13 %</td><td class="n good">&minus;0.02 %</td><td class="n good">+0.01 %</td><td class="n good">+0.04 %</td><td>converged by 8&times;8</td></tr>
+          <tr><td>clamped (reference-normal ghost)</td><td class="n warn">+13.05 %</td><td class="n warn">+6.26 %</td><td class="n warn">+3.75 %</td><td class="n warn">+1.92 %</td><td>about <em>h</em><sup>1.8</sup></td></tr>
+        </tbody>
+      </table>
+      <caption>Clamped reference: <em>w</em><sub>max</sub> = 0.00126 <em>qL</em><sup>4</sup>/<em>D</em>. Positive error means too flexible.</caption>
+      </div>
+
+      <p>At the two mesh densities actually shipped for the clamped plate benchmark, 14&times;14 quads
+      (392 elements) and 30&times;30 (1800 elements), the linear clamped plate comes out
+      <span class="warn">4.75&nbsp;%</span> and <span class="warn">1.38&nbsp;%</span> too flexible respectively.
+      This is the single largest source of disagreement in the small-load end of that benchmark curve
+      (section&nbsp;03).</p>
+    </div>
+  </article>
+</section>
+
+<hr class="soft">
+
+<section>
+  <div class="sec-head"><span class="num">02</span><h2>What is verified correct</h2></div>
+  <p class="lede">These passed every check they were given. They are listed so that the fixes above do
+  not turn into a rewrite of things that already work.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Subsystem</th><th>Check</th><th class="n">Result</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>Rigid-body invariance</td><td>rotate + translate a flat and a curved patch</td><td class="n good">|m| 4.8e-16, |Eb| 4.3e-16, |f| 6.3e-14</td><td class="m">shell_patch_kinematics.py</td></tr>
+      <tr><td>Membrane B-matrix</td><td>vs central difference of the membrane strain</td><td class="n good">2.6e-10</td><td class="m">membrane_matrices.py:6</td></tr>
+      <tr><td>Membrane tangent</td><td>vs central difference of the membrane force</td><td class="n good">6.7e-10, asym 4.1e-17</td><td class="m">membrane_matrices.py:63</td></tr>
+      <tr><td>Free-edge ghost linearisation</td><td>QI, QP, QF vs central difference of the mirror rule</td><td class="n good">2.0e-09</td><td class="m">bending_matrices.py:205&ndash;209</td></tr>
+      <tr><td>Crease penalty force</td><td>vs central difference of the penalty energy</td><td class="n good">1.1e-11 at 90&deg;, 1.2e-09 at 5&deg;</td><td class="m">constraint_penalty.py:73</td></tr>
+      <tr><td>Interior bending energy</td><td>manufactured solution, six imposed fields, two topologies</td><td class="n good">ratio to exact 0.9993 to 1.0002 at 32&times;32</td><td class="m">shell_patch_kinematics.py:133</td></tr>
+      <tr><td>Traction lumping</td><td>3-point rule vs exact area/3 per node</td><td class="n good">exact</td><td class="m">traction_load.py:56&ndash;62</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="two">
+    <div class="panel">
+      <h4>The four-component Voigt convention is a good decision</h4>
+      <p>Carrying <code>[E<sub>11</sub>, E<sub>22</sub>, E<sub>12</sub>, E<sub>21</sub>]</code> with both shear
+      slots rather than an engineering shear strain, and building <code>H</code> over the matching index
+      pairs at <code>shell_element.py:19</code>, makes the double contraction
+      <code>H<sup>&alpha;&beta;&gamma;&delta;</sup>E<sub>&gamma;&delta;</sub></code> come out right with no
+      factor-of-two bookkeeping. It is one of the places this code is cleaner than most textbook
+      implementations.</p>
+    </div>
+    <div class="panel">
+      <h4>The quadrature is not the problem</h4>
+      <p>Membrane strain is constant across the patch and the fitted curvature is one value per patch,
+      so multiplying by the reference area is exact for the element's own fields. The three-point rule
+      in <code>gauss_quadrature.py</code> is only used by the traction and load-stiffness routines, and
+      there it produces the correct <code>area/3</code> lumping.</p>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="panel">
+      <h4>Sign convention: unconventional, and consistent</h4>
+      <p><code>Eb = c_ref &minus; c_curr</code> at <code>shell_patch_kinematics.py:138</code> is the negative of
+      the usual change of curvature, and <code>B_b</code> carries the matching sign. The two cancel in
+      <code>B<sup>T</sup>Dε</code> and in <code>B<sup>T</sup>DB</code>, and the geometric terms are built from the
+      matching stress resultant. This looked like a bug and is not one.</p>
+    </div>
+    <div class="panel">
+      <h4>The hinged cylindrical panel benchmark works</h4>
+      <p>Displacement control on the crown, with the backtracking line search in
+      <code>maindriver_roof.py</code>, tracks the full snap-through path in 5 to 6 Newton iterations per
+      step on a 10&times;10 mesh: limit load 2169&nbsp;N against a reference 2229&nbsp;N, and minimum
+      532&nbsp;N against 527&nbsp;N. This is the code at its best.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section>
+  <div class="sec-head"><span class="num">03</span><h2>Benchmark audit</h2></div>
+  <p class="lede">Four benchmark families ship with reference data. Two reproduce, one does not run to
+  completion, and one was not exercised.</p>
+
+  <h3 style="margin-bottom:10px">Large-deflection cantilever</h3>
+
+  <p>Two separate problems. The first is arithmetic. The tip load applied at
+  <code>maindriver_cantilever.py:56&ndash;59</code> is <code>P + 2P + P = 4P</code>, the consistent lumping of a
+  uniform line load across a three-node width. The dimensionless load plotted at line 238 is
+  <code>F&#772; = 2 P<sub>applied</sub> L&sup2;/(EI)</code>, which is half of it. With
+  <code>P = 2.25&times;10<sup>-5</sup> N</code>, <code>L = 0.04 m</code>, <code>b = 0.002 m</code> and
+  <code>t = 6&times;10<sup>-4</sup> m</code>, the plotted axis ends at 10 where the true value is 20.</p>
+
+  <p>Relabelling the axis puts the code onto the reference curve:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th class="n">F&#772; as plotted</th><th class="n">F&#772; true (4P)</th><th class="n">z/L computed</th><th class="n">reference at plotted F&#772;</th><th class="n">reference at true F&#772;</th><th class="n">error vs true</th></tr></thead>
+    <tbody>
+      <tr><td class="n">0.500</td><td class="n">1.000</td><td class="n">0.28228</td><td class="n">0.16013</td><td class="n">0.29269</td><td class="n good">&minus;3.56 %</td></tr>
+      <tr><td class="n">1.000</td><td class="n">2.000</td><td class="n">0.46843</td><td class="n">0.29269</td><td class="n">0.47395</td><td class="n good">&minus;1.16 %</td></tr>
+      <tr><td class="n">2.000</td><td class="n">4.000</td><td class="n">0.64692</td><td class="n">0.47395</td><td class="n">0.66829</td><td class="n good">&minus;3.20 %</td></tr>
+      <tr><td class="n">3.000</td><td class="n">6.000</td><td class="n">0.72433</td><td class="n">0.58865</td><td class="n">0.75190</td><td class="n good">&minus;3.67 %</td></tr>
+      <tr><td class="n">4.000</td><td class="n">8.000</td><td class="n">0.76648</td><td class="n">0.66829</td><td class="n">0.79215</td><td class="n good">&minus;3.24 %</td></tr>
+      <tr><td class="n">5.000</td><td class="n">10.000</td><td class="n">0.79312</td><td class="n">0.71881</td><td class="n">0.81295</td><td class="n good">&minus;2.44 %</td></tr>
+    </tbody>
+  </table>
+  <caption>Reference: Book_results_cantilever.txt, interpolated. Against the plotted axis the disagreement is 60 to 76 %; against the true axis it is 1.2 to 3.7 %.</caption>
+  </div>
+
+  <p>The second problem is that the driver does not finish. Run unmodified on the mesh it names,
+  <code>maindriver_cantilever.py</code> diverges at load step 9:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th class="n">scale</th><th class="n">0.30</th><th class="n">0.35</th><th class="n">0.40</th><th class="n">0.45</th><th class="n">0.50</th><th class="n">0.55</th><th class="n">0.60</th></tr></thead>
+    <tbody>
+      <tr><td>w_tip (m), 40 mm cantilever</td><td class="n good">0.029106</td><td class="n warn">0.027379</td><td class="n bad">&minus;0.975252</td><td class="n bad">&minus;0.444060</td><td class="n bad">0.012451</td><td class="n bad">&minus;0.058174</td><td class="n bad">&minus;2.845137</td></tr>
+    </tbody>
+  </table>
+  <caption>Six load steps hit max_iter = 150 with final residuals up to 6.9e+18. The loop exits on the iteration counter and the driver stores the diverged state without comment.</caption>
+  </div>
+
+  <p>The stored <code>Cantilever_results.txt</code> reaches <code>F&#772; = 10</code> smoothly with
+  <em>z/L</em> = 0.1508 at <code>F&#772; = 0.5</code>, which is the answer for a total tip load of 2<em>P</em>,
+  not 4<em>P</em>. That file was produced by a different load specification than the one now in the
+  driver, so it is not evidence that the current code works.</p>
+
+  <p>Repairing F1 alone carries the run to step 18 of 21; repairing F1 and F2 carries it to step 19.
+  Neither reaches the end, because the geometric stiffness has not been re-derived to match (F4).</p>
+
+  <h3 style="margin:32px 0 10px">Clamped square plate under uniform pressure</h3>
+
+  <p>This one reproduces. Run unmodified, <code>maindriver_Plate[CourseMesh].py</code> matches its own
+  stored <code>coursemesh.txt</code> to within 0.5&nbsp;% at every load step. Against the two digitised
+  reference curves the agreement is load dependent:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th class="n">qa&#8308;/Dh</th><th class="n">w/h computed</th><th class="n">w/h stored</th><th class="n">Stolarski et al.</th><th class="n">difference</th></tr></thead>
+    <tbody>
+      <tr><td class="n">20</td><td class="n">0.3934</td><td class="n">0.3911</td><td class="n">0.3139</td><td class="n bad">+25.3 %</td></tr>
+      <tr><td class="n">60</td><td class="n">0.9070</td><td class="n">0.9053</td><td class="n">0.8059</td><td class="n warn">+12.5 %</td></tr>
+      <tr><td class="n">120</td><td class="n">1.3427</td><td class="n">1.3401</td><td class="n">1.2791</td><td class="n warn">+5.0 %</td></tr>
+      <tr><td class="n">200</td><td class="n">1.7107</td><td class="n">1.7053</td><td class="n">1.6672</td><td class="n good">+2.6 %</td></tr>
+      <tr><td class="n">320</td><td class="n">2.0888</td><td class="n">2.0793</td><td class="n">2.0620</td><td class="n good">+1.3 %</td></tr>
+    </tbody>
+  </table>
+  <caption>a = L/2 = 10, D = 1, h = t = 1, 14&times;14 coarse mesh. Positive difference means the code is more flexible.</caption>
+  </div>
+
+  <p>The pattern points at F9. The disagreement is largest where bending dominates and shrinks as
+  membrane stretching takes over, which is what a too-flexible clamped edge produces. The linear-regime
+  measurement for this mesh, 4.75&nbsp;% too flexible, accounts for part of the low-load gap but not all
+  of it. The two digitised references disagree with each other by about 4&nbsp;% on the initial slope, so
+  the reference values at low load carry their own uncertainty, and the residual gap should not be
+  attributed entirely to the code without a mesh convergence study on this benchmark.</p>
+
+  <h3 style="margin:32px 0 10px">Hinged cylindrical panel, snap-through</h3>
+
+  <p>Run at 10&times;10 with displacement control on the crown and the backtracking line search enabled,
+  the driver traverses the full path including the descending branch, at 5 to 6 Newton iterations per
+  step throughout:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Feature</th><th class="n">computed</th><th class="n">reference</th><th class="n">difference</th></tr></thead>
+    <tbody>
+      <tr><td>limit (snap-through) load</td><td class="n">2169 N at w = 12.0 mm</td><td class="n">2229 N at w = 10.6 mm</td><td class="n good">&minus;2.7 %</td></tr>
+      <tr><td>minimum load on the descending branch</td><td class="n">532 N at w = 20.1 mm</td><td class="n">527 N at w = 19.3 mm</td><td class="n good">+1.0 %</td></tr>
+      <tr><td>rising branch, w = 1.5 to 9 mm</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n warn">&minus;4 to &minus;7 %</td></tr>
+    </tbody>
+  </table>
+  <caption>R = 2540, L = 508, &theta; = 0.1, t = 12.7, E = 3102.75, &nu; = 0.3. Reference: Roof_benchmarkdata.txt.</caption>
+  </div>
+
+  <p>The consistent 4 to 7&nbsp;% softness on the rising branch is what a coarse mesh plus F1, F2 and F9
+  would be expected to produce, and it is worth re-running at 16&times;16 and 24&times;24 before drawing
+  a conclusion from it.</p>
+
+  <h3 style="margin:32px 0 10px">Slit annular plate</h3>
+
+  <p>Not run. The coarse configuration is 720 elements and 1281 DOFs; the fine one at
+  <code>n_r = 16, n_theta = 100</code> is 3200 elements and 5151 DOFs, which at the measured assembly rate
+  and a dense factorisation is several hours per load history. The mesh generator adds a
+  <code>1e-5</code> helical rise in <code>slit_mesh_setup.py:24</code> to separate the two lips of the slit,
+  which is a reasonable device, though it does mean the reference configuration is not exactly flat and
+  <code>c_ref</code> is not exactly zero.</p>
+</section>
+
+<hr class="soft">
+
+<section>
+  <div class="sec-head"><span class="num">04</span><h2>Driver and software defects</h2></div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>ID</th><th>Defect</th><th>Location</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="m">F10</td>
+        <td>No Newton driver checks whether the step converged. Every loop is <code>while normR &gt; tol and iter &lt; max_iter</code> or <code>while iter &lt; max_iter</code> with a <code>break</code>, and the state is committed with <code>U_n = U.copy()</code> regardless.</td>
+        <td class="m">all 10 drivers</td>
+        <td class="bad">Diverged states are silently written into the results file, as happens on the cantilever</td>
+      </tr>
+      <tr>
+        <td class="m">F11</td>
+        <td><code>shell_element_routine</code> builds <code>K_bending_geometric</code> at line 101 before the <code>compute</code> switch is tested at line 141, so <code>compute="force"</code> pays the full tangent cost.</td>
+        <td class="m">shell_element.py:101</td>
+        <td class="warn">Residual assembly costs 1.26 ms per element instead of 0.34 ms</td>
+      </tr>
+      <tr>
+        <td class="m">F12</td>
+        <td><code>jax_penalty_module</code> is imported but is not in the archive.</td>
+        <td class="m">maindriver_box_force.py:16<br>maindriver_plate_stiffeners_force.py<br>maindriver_box_testplate_displacement.py</td>
+        <td class="bad">Three of ten drivers raise ModuleNotFoundError at import</td>
+      </tr>
+      <tr>
+        <td class="m">F13</td>
+        <td><code>K_load_global</code> is assembled every Newton iteration and then discarded by <code>K_tangent = K_global - 0</code>.</td>
+        <td class="m">maindriver_box_force.py:206&ndash;213</td>
+        <td class="warn">Dead work per iteration, and the follower-load stiffness never reaches the tangent</td>
+      </tr>
+      <tr>
+        <td class="m">F14</td>
+        <td><code>constitutive.py</code> is three lines containing only <code>import numpy as np</code>; <code>element_dofs.py</code> and <code>visualization.py</code> are never imported by anything.</td>
+        <td class="m">three modules</td>
+        <td>Dead code, and <code>element_dofs.extract_element_dofs</code> duplicates <code>dof.get_elem_dof_map</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Two smaller notes. In <code>maindriver_roof.py</code> the line search accepts as soon as
+  <code>normR_trial &lt; normR</code>, with no Armijo factor, so it will accept a step that reduces the
+  residual by a fraction of a percent; the slit driver does use <code>c_armijo = 1e-4</code>. And
+  <code>build_element_topology</code> classifies a two-element intersection as a stiffener joint when
+  <code>abs(edge_dir[2]) &gt; 0.8</code> at <code>mesh.py:113</code>, a hard-coded assumption that stiffener webs
+  are vertical in the global frame, which will misclassify any model built on a different axis.</p>
+</section>
+
+<hr class="soft">
+
+<section>
+  <div class="sec-head"><span class="num">05</span><h2>Performance: where the time goes and what it could be</h2></div>
+  <p class="lede">The code is not slow because the mathematics is expensive. It is slow because the
+  mathematics is executed one three-by-three block at a time through the Python interpreter.</p>
+
+  <h3 style="margin-bottom:10px">Measured profile</h3>
+
+  <p>One element, one call, averaged over 512 to 4608 elements on the roof mesh. Under
+  <code>cProfile</code>, <code>K_bending_geometric</code> accounts for 69&nbsp;% of the element's cumulative
+  time and <code>np.block</code> alone for 22&nbsp;%; the direct timings below agree, with
+  <code>K4</code>, <code>K5</code> and <code>K6</code> together taking 804 of the 1285&nbsp;&micro;s.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Operation</th><th class="n">Cost</th><th class="n">Share of element</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>full element, force + tangent</td><td class="n">1 285 &micro;s</td><td class="n">100 %</td><td>direct timing, no profiler attached</td></tr>
+      <tr><td>full element, <code>compute="force"</code></td><td class="n">1 260 &micro;s</td><td class="n">98 %</td><td>the tangent is built and discarded (F11)</td></tr>
+      <tr><td><code>K5_geometric_matrix</code></td><td class="n">465 &micro;s</td><td class="n">36 %</td><td>27 blocks of small matrix products</td></tr>
+      <tr><td><code>K4_geometric_matrix</code></td><td class="n">232 &micro;s</td><td class="n">18 %</td><td>three <code>np.block</code> calls</td></tr>
+      <tr><td><code>K6_edge_geometric_matrix</code></td><td class="n">107 &micro;s</td><td class="n">8 %</td><td></td></tr>
+      <tr><td>scatter into the dense global matrix</td><td class="n">247 &micro;s</td><td class="n">+19 %</td><td>on top of the element: a 324-iteration Python loop</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The primitives explain the rest:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Call</th><th class="n">Cost</th><th>Direct replacement</th><th class="n">Cost</th><th class="n">Ratio</th></tr></thead>
+    <tbody>
+      <tr><td class="m">np.cross(3, 3)</td><td class="n">20.7 &micro;s</td><td>three multiply-subtracts</td><td class="n">1.3 &micro;s</td><td class="n good">16&times;</td></tr>
+      <tr><td class="m">np.block(6&times;6 of 3&times;3)</td><td class="n">44.8 &micro;s</td><td>slice assignment into a preallocated 18&times;18</td><td class="n">13.9 &micro;s</td><td class="n good">3.2&times;</td></tr>
+      <tr><td class="m">np.linalg.inv(3&times;3)</td><td class="n">4.0 &micro;s</td><td>closed-form cofactor inverse</td><td class="n">&mdash;</td><td class="n">&mdash;</td></tr>
+      <tr><td class="m">H2_matrix()</td><td class="n">8.6 &micro;s</td><td>module-level constant</td><td class="n">0 &micro;s</td><td class="n good">&infin;</td></tr>
+      <tr><td class="m">18&times;18 @ 18&times;18</td><td class="n">1.2 &micro;s</td><td colspan="3">for reference: the dense matrix chain is essentially free</td></tr>
+    </tbody>
+  </table>
+  <caption>An 18&times;18 product is 11 664 flops and costs 1.2 &micro;s. A three-component cross product is 9 flops and costs 20.7 &micro;s. The ratio is the whole story.</caption>
+  </div>
+
+  <h3 style="margin:32px 0 10px">One Newton iteration, 4608 elements, 7203 DOFs</h3>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Configuration</th><th class="n">residual</th><th class="n">tangent + scatter</th><th class="n">factor + solve</th><th class="n">total</th><th class="n">K memory</th><th class="n">speedup</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A</strong> as shipped: dense K, dense LU</td><td class="n">6.06 s</td><td class="n">7.84 s</td><td class="n">2.32 s</td><td class="n">16.22 s</td><td class="n">415 MB</td><td class="n">1&times;</td></tr>
+      <tr><td><strong>B</strong> same maths, no <code>np.block</code>, no <code>np.cross</code>, hoisted constants, <code>compute="force"</code> honoured, COO scatter, sparse LU</td><td class="n">1.69 s</td><td class="n">4.92 s</td><td class="n">0.21 s</td><td class="n">6.82 s</td><td class="n">5 MB</td><td class="n good">2.4&times;</td></tr>
+      <tr><td><strong>C</strong> element energy in JAX, force and tangent by autodiff, <code>vmap</code> + <code>jit</code>, COO scatter, sparse LU</td><td colspan="2" class="n">0.13 s (both together)</td><td class="n">0.21 s</td><td class="n">0.37 s</td><td class="n">5 MB</td><td class="n good">43&times;</td></tr>
+    </tbody>
+  </table>
+  <caption>Configuration B is bit-identical to A: max |K_fast &minus; K_orig| = 0 on the undeformed mesh and 1.8e-16 relative on a randomly deformed one. Single process, four cores, CPU only.</caption>
+  </div>
+
+  <div class="callout">
+    <p>Configuration C is not only faster. Because the tangent is <code>jacfwd(grad(energy))</code>, it is
+    the exact Hessian of the energy by construction: symmetric to 1.5e-16 and consistent with its own
+    force to machine precision. F1, F2, F4 and F6 are all defects of hand-differentiation, and all four
+    become impossible to write in that formulation.</p>
+  </div>
+
+  <h3 style="margin:32px 0 10px">The scaling wall</h3>
+
+  <p>The dense global matrix is the harder limit. <code>K_global = np.zeros((ndof, ndof))</code> costs
+  <em>n</em>&sup2; storage and <em>n</em>&sup3; factorisation, and the assembled pattern has about 54
+  non-zeros per row:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th class="n">DOFs</th><th class="n">dense K</th><th class="n">sparse K</th><th class="n">dense LU</th><th class="n">sparse LU</th></tr></thead>
+    <tbody>
+      <tr><td class="n">867</td><td class="n">6 MB</td><td class="n">0.5 MB</td><td class="n">0.44 s</td><td class="n">0.030 s</td></tr>
+      <tr><td class="n">3 267</td><td class="n">85 MB</td><td class="n">2.1 MB</td><td class="n">2.41 s</td><td class="n">0.082 s</td></tr>
+      <tr><td class="n">7 203</td><td class="n">415 MB</td><td class="n">4.7 MB</td><td class="n">6.42 s</td><td class="n">0.204 s</td></tr>
+      <tr><td class="n">20 000</td><td class="n bad">3.2 GB</td><td class="n">13 MB</td><td colspan="2" class="n">extrapolated</td></tr>
+      <tr><td class="n">100 000</td><td class="n bad">80 GB</td><td class="n">65 MB</td><td colspan="2" class="n">extrapolated</td></tr>
+    </tbody>
+  </table>
+  <caption>The <code>np.ix_(free, free)</code> submatrix extraction in every driver copies the dense block a second time on each iteration.</caption>
+  </div>
+
+  <h3 style="margin:32px 0 10px">What a C++ rewrite actually buys</h3>
+
+  <p>The same element energy compiled with <code>g++ -O3 -march=native</code>, differentiated by
+  forward-mode dual numbers, single threaded:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Quantity</th><th class="n">C++</th><th class="n">Python</th><th class="n">ratio</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>energy only</td><td class="n">0.108 &micro;s</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td>the element's entire useful arithmetic</td></tr>
+      <tr><td>energy + exact gradient</td><td class="n">3.31 &micro;s</td><td class="n">1 260 &micro;s</td><td class="n good">380&times;</td><td>forward AD, 18 seeds</td></tr>
+      <tr><td>energy + exact gradient + exact Hessian</td><td class="n">266 &micro;s</td><td class="n">1 282 &micro;s</td><td class="n warn">4.8&times;</td><td>forward-over-forward is the wrong AD mode here</td></tr>
+      <tr><td>sparse LDLT factorise + solve, 7203 DOFs</td><td class="n">4.2 ms</td><td class="n">204 ms</td><td class="n good">49&times;</td><td>Eigen SimplicialLDLT</td></tr>
+    </tbody>
+  </table>
+  <caption>The 266 &micro;s figure is an artefact of nesting two 18-wide dual numbers, which makes every intermediate 324 doubles wide. Forward-over-reverse, which is what JAX's jacfwd(grad(&middot;)) does, is the right structure and is what puts configuration C at 28 &micro;s per element for force and tangent together.</caption>
+  </div>
+
+  <div class="two">
+    <div class="panel">
+      <h4>If the goal is to finish the thesis</h4>
+      <p>Take configuration B. It is a day of work, changes no mathematics, and is verifiable by asserting
+      that the new element returns bitwise the same arrays as the old one. It removes the residual-assembly
+      waste (F11) and the dense-matrix ceiling, which is what currently stops the fine slit mesh from
+      running at all.</p>
+    </div>
+    <div class="panel">
+      <h4>If the goal is a code that can be trusted</h4>
+      <p>Take configuration C. Writing the element as a scalar energy function and letting
+      <code>jax.grad</code> and <code>jax.jacfwd</code> produce the force and tangent deletes
+      <code>bending_matrices.py</code> in its entirety, which is 719 of the 6977 lines and the location of
+      three of the four highest-severity findings. The energy fits in about 40 lines.</p>
+    </div>
+  </div>
+
+  <p>A C++ rewrite is the right answer only if the target is a mesh size that JAX on GPU cannot reach,
+  or an embedded or coupled-solver deployment. For the meshes in this archive it costs weeks and buys
+  perhaps a further factor of two over configuration C, since at 28 &micro;s per element the sparse
+  factorisation is already comparable to assembly.</p>
+</section>
+
+<hr class="soft">
+
+<section>
+  <div class="sec-head"><span class="num">06</span><h2>Fix order</h2></div>
+  <p class="lede">Ordered by correctness gained per hour spent. The first three are hours; the fourth is
+  the real project.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th class="n">#</th><th>Change</th><th>Where</th><th>Verified by</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td>Swap <code>np.outer(e2, e1)</code> for <code>np.outer(e1, e2)</code></td><td class="m">constraint_penalty.py:92</td><td>assert <code>K_mat == kappa * outer(g, g)</code></td></tr>
+      <tr><td class="n">2</td><td>Move the <code>K_bending_geometric</code> call inside the <code>compute</code> branch</td><td class="m">shell_element.py:101</td><td>identical <code>f_int_e</code>, 3.7&times; faster residual</td></tr>
+      <tr><td class="n">3</td><td>Raise on non-convergence and cut the load step instead of committing the state</td><td class="m">all drivers</td><td>the cantilever stops at step 9 instead of printing nonsense</td></tr>
+      <tr><td class="n">4</td><td>Restore <code>Y[ghost, F] = +2 n&otimes;n</code> for fixed edges</td><td class="m">bending_matrices.py:222</td><td>central difference of the ghost rule</td></tr>
+      <tr><td class="n">5</td><td>Sparse <code>K</code>, precomputed COO index map, <code>splu</code></td><td class="m">dof.py, all drivers</td><td>same solution, 88&times; less memory</td></tr>
+      <tr><td class="n">6</td><td>Re-derive <code>B_b</code> and <code>K_bending_geometric</code> together on one parametrisation, or replace both with autodiff of the energy</td><td class="m">shell_element.py:76, bending_matrices.py</td><td><code>||F_int &minus; dW/dU||</code> falls from 16 % to machine precision</td></tr>
+      <tr><td class="n">7</td><td>Replace the mirrored free-edge ghost with an explicit <code>M<sub>nn</sub> = 0</code> constraint in the edge frame</td><td class="m">ghost.py, bending_matrices.py</td><td>the union-jack plate converges to the same answer as the structured one</td></tr>
+      <tr><td class="n">8</td><td>Penalise the signed fold angle rather than its cosine, and scale <code>&kappa;</code> by hinge length</td><td class="m">constraint_penalty.py</td><td>hinge stiffness independent of <code>&theta;<sub>0</sub></code> and of mesh density</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin:30px 0 10px">Reproducing every number above</h3>
+
+  <p>Twelve scripts, committed next to this report. Each one imports the unmodified source and prints
+  the table it supports.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Script</th><th>Produces</th></tr></thead>
+    <tbody>
+      <tr><td class="m">t1_kinematics.py</td><td>rigid body, B_m, first pass on B_b and f_int</td></tr>
+      <tr><td class="m">t2_bending_isolated.py</td><td>F1 and F2, including the patched-H1 comparison</td></tr>
+      <tr><td class="m">t3_tangent.py</td><td>F4, membrane and bending tangent blocks separately</td></tr>
+      <tr><td class="m">t4_edge_and_crease.py</td><td>F5 and F6</td></tr>
+      <tr><td class="m">t5_crease_geo.py</td><td>F6 split into material and geometric parts</td></tr>
+      <tr><td class="m">t6_plate_convergence.py</td><td>F9, both edge treatments</td></tr>
+      <tr><td class="m">t7_global_consistency.py</td><td>F3, the 16.3 % figure</td></tr>
+      <tr><td class="m">t13&ndash;t19 (five scripts)</td><td>F8, mesh topology sensitivity and the manufactured-solution energy test</td></tr>
+      <tr><td class="m">t10_micro.py, t11, t20, prof_element.py</td><td>section 05 timings</td></tr>
+      <tr><td class="m">jax_element.py, cpp/bench.cpp</td><td>configuration C and the C++ figures</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer class="end">
+  <p>All measurements taken on a four-core Linux container, Python 3.11.15, NumPy 2.4.6,
+  SciPy 1.17.1, JAX 0.10.2 (CPU), g++ 13.3.0, Eigen 3.4.0. Finite-difference checks use central
+  differences with step 10<sup>-7</sup> for Jacobians and 10<sup>-6</sup> for gradients of energies;
+  a relative error near 10<sup>-10</sup> is the floor of that scheme and is reported as exact.</p>
+</footer>
+
+</div>
