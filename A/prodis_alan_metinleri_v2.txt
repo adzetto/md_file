@@ -1,12 +1,12 @@
 MOTOMAP – PRODİS ALAN METİNLERİ (iş planı v2, 30.09.2026)
-Metin alanları: paragraflar ayrı satırlardadır, olduğu gibi yapıştırılır (bold etiketler düz metne çevrilmiştir).
+Metin alanları: paragraflar ayrı satırlardadır, olduğu gibi yapıştırılır.
 Tablo alanları: satır satır, sütunlar ' | ' ile ayrılmıştır.
 
 ==============================================================================
 1.1 Ürün Tanımı
 ==============================================================================
 MotoMap, motosiklet için geliştirilmiş rota ve varış süresi motorunu kullanan, öncelikle bireysel sürücülere yönelik bir mobil uygulamadır; aynı motor çok duraklı çalışan kurye işletmelerine kurumsal hizmet olarak genişletilmektedir. Sürücüye trafiği motosiklet dinamiklerine göre değerlendiren rota ve süre sunarken, kurye işletmelerine ise aynı rota ve süre motorunu kullanarak toplam kilometreyi azaltmayı hedefleyen teslimat sıralaması sağlamayı hedefler.
-Sorun: Türkiye’de Ağustos 2026 itibarıyla 7.608.433 motosiklet bulunmaktadır (taşıtların %21,8’i; TÜİK). İstanbul, INRIX 2025’e göre dünyanın en sıkışık kentidir. Türkiye’de yaygın kullanılan genel navigasyon uygulamaları ağırlıklı olarak otomobil odaklı rota ve süre hesaplamaktadır. Bu nedenle sıkışık trafikte gösterilen süre motosiklet için uzun, açık yolda ise düşük motor hacimli motosikletler için kısa kalabilmekte; önerilen rota motosiklet kullanımına uygun olmayan yollara sapabilmektedir (Ek-H). Google’ın iki tekerlekli rota hizmeti 40 ülkede, Waze’in motosiklet modu ise 13 Temmuz 2026’dan itibaren 7 ülkede sunulmaktadır; Türkiye Eylül 2026 itibarıyla her iki hizmetin duyurulan kapsamı dışındadır (Ek-C).
+Sorun: Türkiye’de Ağustos 2026 itibarıyla 7.608.433 motosiklet bulunmaktadır (taşıtların %21,8’i; TÜİK). İstanbul, INRIX 2025’e göre dünyanın en sıkışık kentidir. Türkiye’de yaygın kullanılan genel navigasyon uygulamaları ağırlıklı olarak otomobil odaklı rota ve süre hesaplamaktadır. Bu nedenle sıkışık trafikte gösterilen süre motosiklet için uzun, açık yolda ise düşük motor hacimli motosikletler için kısa kalabilmekte; önerilen rota motosiklet kullanımına uygun olmayan yollara sapabilmektedir (Ek-H). Google’ın iki tekerlekli rota hizmeti 40 ülkede sunulmakta ve Türkiye’yi kapsamamaktadır; Waze’de 2017’den beri bulunan motosiklet araç türünün Türkiye’de kullanılabilirliği doğrulanamamış, 13 Temmuz 2026’da duyurulan yeni motosiklet modu ise 7 ülkeyle sınırlıdır (Ek-C).
 Ürün: MotoMap rota hesaplamasını kendi motoruyla gerçekleştirir. OpenStreetMap yol ağı, yasak dönüşleri yapısal olarak dışlayan bir yol hiyerarşisine dönüştürülür; süreler her 180 saniyede canlı trafik verileriyle güncellenir. Varış süresi, canlı otomobil hızlarına motosiklete özgü hız farkı uygulanarak hesaplanır. Sürücüye standart, viraj ve ücretli yollardan kaçınan güvenli mod olmak üzere üç sürüş modu ile sesli ve dokunmasız yönlendirme sağlanır. Aynı motor kurye işletmelerine 12 durağa kadar teslimat sıralaması sunar; kurye operasyon paneli ve verim raporları proje döneminde geliştirilecektir (Ek-J).
 Bugün: Kamuya açık sunucuda Kadıköy için canlı hizmet verilmekte; İstanbul geneli yol ağı kurulmuş olup bellek sınırı nedeniyle henüz canlı hizmette değildir (Ek-J; demo ekranları Ek-J.1). Rota çekirdeği referans algoritmayla 40/40, dönüş kısıtlı sürümü 30/30 sorguda aynı sonucu vermiş; yük testinde medyan yanıt süresi tek kullanıcıda 39 ms, 100 eşzamanlı kullanıcıda 2,5 saniye olmuştur (Ek-A). %80 kabul eşiğine göre THS 5 kriterlerinde %88 sağlanarak seviye tamamlanmış, THS 6 kriterlerinde ortalama %76 ilerlemeye ulaşılmıştır (Ek-B).
 Çözülecek belirsizlik: Karma trafikte motosikletin otomobile göre hız farkının büyüklüğü, 18 aylık proje sürecinde kullanıcı onayıyla toplanacak sürüş verileriyle kestirilecektir (THS 6, 7 ve 8). Kurye kullanımındaki kilometre kazanımı ise önceden kayıt altına alınmış pilot senaryolarla sınanacaktır.
@@ -43,9 +43,9 @@ Büyüme eğilimi. Türkiye’de kayıtlı motosiklet parkı 2021 sonundaki yakl
 1.5 Rekabet Durumu
 ==============================================================================
 Türkiye’de rekabet dört grupta oluşmaktadır: genel navigasyon uygulamaları, motosiklet odaklı uluslararası uygulamalar, yeni yerli motosiklet uygulamaları ve kurumsal rota optimizasyonu/API sağlayıcıları. 23.09.2026 tarihli mağaza ve web taramasında Türkiye’de canlı trafik verisinden motosiklete özgü varış süresi ürettiğini ve aynı süre modelini bireysel navigasyon ile kurye optimizasyonunda birlikte kullandığını beyan eden bir ürün tespit edilmemiştir (Ek-C).
-Genel navigasyon. Google Haritalar, Apple Haritalar, Yandex ve Waze ücretsiz olmaları, yüksek marka bilinirlikleri ve geniş kullanıcı tabanları nedeniyle en güçlü dolaylı rakiplerdir. Google Routes API’nin iki tekerlekli modu Eylül 2026 itibarıyla 40 ülkede kullanılmakta, ancak Türkiye desteklenen ülkeler arasında yer almamaktadır. Waze ise 13 Temmuz 2026’da motosiklete özgü rota, ETA ve yol tehlikelerini içeren motosiklet modunu Arjantin, Brezilya, Kolombiya, Malezya, Meksika, Peru ve Filipinler’de kullanıma açmış ve kapsamın genişletileceğini duyurmuştur. Bu nedenle Waze, Türkiye’ye giriş ihtimali bakımından MotoMap’in önemli küresel rekabet baskılarından biridir.
+Genel navigasyon. Google Haritalar, Apple Haritalar, Yandex ve Waze ücretsiz olmaları ve geniş kullanıcı tabanları nedeniyle en güçlü dolaylı rakiplerdir. Google Routes API’nin iki tekerlekli modu Eylül 2026 itibarıyla 40 ülkede kullanılmakta, ancak Türkiye desteklenen ülkeler arasında yer almamaktadır. Waze ise 13 Temmuz 2026’da motosiklete özgü rota, ETA ve yol tehlikelerini içeren motosiklet modunu Arjantin, Brezilya, Kolombiya, Malezya, Meksika, Peru ve Filipinler’de kullanıma açmış ve kapsamın genişletileceğini duyurmuştur. Waze’de 2017’den beri bulunan motosiklet araç türünün Türkiye’de kullanılabilirliği doğrulanmamıştır; Waze bu nedenle en yakın küresel rekabet baskısıdır (Ek-C).
 Uluslararası motosiklet uygulamaları. Kurviger ve calimoto özellikle virajlı/manzaralı rota, tur planlama, çevrimdışı kullanım ve motosiklet topluluğu deneyiminde güçlüdür. Kurviger hızlı, virajlı ve ekstra virajlı rota profilleri ile yol türü kaçınmaları sunarken, calimoto virajlı rota planlama, sesli navigasyon ve sürüş kayıtlarına odaklanmaktadır. Bunların temel konumu gezi/tur navigasyonudur; MotoMap’in ilk hedefi ise şehir içi günlük kullanımda motosiklete özgü ETA doğruluğudur (Ek-C).
-Yerli doğrudan rakipler. Motoseyir ve MotoAtlas 2026’da pazara giren iki yerli üründür. Motoseyir motosiklete özel rota, grup sürüşü ve birden fazla hedef sıralama özellikleri sunmakta; Kurye Pro paketi aylık 99,99 TL’dir. MotoAtlas ise hızlı/dengeli/virajlı rota, sürüş kaydı ve topluluk özellikleriyle konumlanmakta; aylık üyeliği 119 TL’dir. Bu iki girişim özellikle Türkiye’de kullanıcı edinimi ve fiyatlama açısından doğrudan rekabet oluşturmaktadır (Ek-C).
+Yerli doğrudan rakipler. Motoseyir ve MotoAtlas 2026’da pazara giren iki yerli üründür. Motoseyir motosiklete özel rota, grup sürüşü ve birden fazla hedef sıralama özellikleri sunmakta; Kurye Pro paketi aylık 99,99 TL’dir. MotoAtlas ise hızlı/dengeli/virajlı rota, sürüş kaydı ve topluluk özellikleriyle konumlanmakta; aylık üyeliği 119 TL’dir. Bu iki girişim kullanıcı edinimi ve fiyatlama açısından doğrudan rakiptir (Ek-C).
 Kurumsal rota optimizasyonu ve API. Optiyol gibi çözümler çok duraklı dağıtım, araç kapasitesi, zaman pencereleri ve gerçek zamanlı trafik gibi kısıtlarla filo optimizasyonu sunmaktadır. HERE Routing API ise motosikletlere açık yolları dikkate alan iki tekerlekli rotalama altyapısı sunar; bu nedenle doğrudan son kullanıcı rakibinden çok teknolojik ikame/altyapı rakibidir.
 MotoMap’in konumu. Rekabet farkı yalnız “motosiklet rotası” sunmak değildir; hedeflenen fark, Türkiye trafiğinde saha verisiyle doğrulanacak motosiklete özgü varış süresi, bu süreyi kullanan çok duraklı kurye sıralaması ve aynı rota motorunun bireysel uygulama, filo paneli ve API’de kullanılabilmesidir. Bu fark henüz saha doğruluk raporları ve kurye pilotuyla doğrulanacaktır; dolayısıyla mevcut aşamada kanıtlanmış üstünlük değil, ölçülmesi planlanan rekabet hipotezidir.
 
@@ -79,7 +79,6 @@ Kurye çalışma koşulları (SKA 8.8). 2025’te en az 44 motokurye iş başın
 Kaynak verimliliği ve çevresel etki (SKA 11.6, 13). Kurye filosunda toplam kilometrenin azaltılması yakıt tüketimini, işletme maliyetini ve buna bağlı emisyonları düşürebilir. Bu etki varsayım olarak bırakılmayacak; Ay 6’da 20 kurye ile 8 haftalık ölçüm pilotunda toplam kilometre ve durak başına mesafe değişimi ölçülecektir. Ölçüm yapılmadan emisyon azalımı nicel bir başarı olarak sunulmayacaktır.
 Erişilebilirlik ve güven ilkesi. Temel motosiklet navigasyonu ve güvenlik odaklı rota Silver katmanında ücretsiz tutulacaktır. Böylece güvenlikle ilişkili temel işlevlere erişim ücretli pakete bağlanmaz; ücretli katmanlar isteğe bağlı gelişmiş özellikler üzerinden farklılaşır ve reklam yalnız sürüş dışı ekranlarda gösterilir.
 
-[Not] 2 Ürün ve Teknoloji
 ==============================================================================
 2.1 Değer Önerisi
 ==============================================================================
@@ -136,7 +135,6 @@ Virajlı rota belirleme yöntemi | US11/762,716 | Viraj sayısı yüksek yolun t
 Çok konuma en uygun navigasyon | PCT/IB2019/000359 | Çok noktada en iyi ziyaret sırası | Motosiklete özgü ETA'nın çok duraklı sıralamada maliyet girdisi olması
 Motosiklet grubunda sürüş yöntemi | US18/311,135 | Motosiklet kısıtıyla alternatif rota | Motor özelliklerine göre yol/eğim maliyetinin uyarlanabilmesi
 
-[Not] Form kısıtı: 8 satır; ilk üç sütun en çok 100 karakter. Ekip içi ön tarama notu (vekil taraması değildir) 2.6’dadır.
 ==============================================================================
 2.6 Fikri Mülkiyet Hakları
 ==============================================================================
@@ -158,7 +156,6 @@ Abonelik, tüketici ve e-ticaret. Gold/Platinum satışları App Store/Google Pl
 Kurye taşımacılığı. Kurye işletmelerine taşıma süresi taahhüdü verilmez; filo ürünü süre garantisi yerine rota, kilometre ve verim raporu sunar.
 İnternet ve siber güvenlik. Açık yayından önce bağımsız sızma testi yapılacak; erişim kontrolü, veri güvenliği ve olay yönetimi tedbirleri uygulanacaktır. Topluluk özelliklerinin 5651 ve ilgili çevrimiçi platform yükümlülüklerini doğurup doğurmadığı lansman öncesinde hukuk danışmanıyla ayrıca değerlendirilecektir.
 
-[Not] 3 Ekip
 ==============================================================================
 3.1 Ekip ve Deneyim
 ==============================================================================
@@ -210,7 +207,6 @@ Kullanıcı güveni ve veri gizliliği. Kişisel veri satışı MotoMap’in iş
 Kullanıcı odaklılık. Ürün yol haritası yalnız kurucu varsayımlarına göre değil, sürücü ve kurye geri bildirimi, saha testleri, kullanım davranışı ve ödeme istekliliği ölçümlerine göre güncellenir. Ücretsiz Silver katmanı yeni kullanıcıların ürünü düşük bariyerle deneyebilmesini sağlar.
 Ekip çalışması ve sorumluluk. Ticari, yazılım ve ulaştırma/algoritma sorumlulukları farklı kurucularda olsa da kritik ürün ve şirket kararları ortak değerlendirilir. Kod, teknik raporlar ve proje dokümantasyonu ekip içinde paylaşılır; kritik bilginin tek kişide kalmaması hedeflenir. Hata ve başarısız testler saklanacak sorunlar değil, ürünün bir sonraki kararını şekillendiren öğrenme çıktıları olarak ele alınır.
 
-[Not] 4 İş Modeli ve Finansal Öngörüler
 ==============================================================================
 4.1 İş Modeli
 ==============================================================================
@@ -236,7 +232,6 @@ API ve iş ortaklığı kanalı (B2B). Teslimat/dağıtım platformları ve loji
 ==============================================================================
 4.3 Kritik İş Adımları
 ==============================================================================
-[Not] Ürünün ticarileştirme sürecindeki kritik iş adımlarını aşağıdaki tabloda özetleyiniz. Kritik iş adımlarını belirlerken proje süresi (en fazla 18 ay) ve projenin bitişini takip eden 5 yılı dikkate alınız. Öngörülen gerçekleşme tarihini ay ve yıl olarak belirtiniz.
 İş Tanımı | Öngörülen Gerçekleşme Tarihi | Doğrulanabilir Başarım Ölçütleri
 Kuruluş; YPSS; fikri mülkiyet devri; marka | Aralık 2026 | Şirket tescili; YPSS imzası; fikri hak devirleri; marka başvuru no
 Etik onay; KVKK paketi; sızma testi | Mart 2027 | Etik kurul kararı; KVKK/onam dokümanları; sızma testinde 0 yüksek bulgu
@@ -255,18 +250,15 @@ Yıl 3: API ölçeği; yurt dışı kararı | Haziran 2031 | API ölçekleme pla
 Yıl 4: Türkiye genelinde kurumsal satış | Haziran 2032 | Türkiye genelinde aktif kurumsal satış kanalı; komisyon sonrası gelir en az 2,0 milyon TL
 Yıl 5: ticarileşme raporu | Haziran 2033 | 5 yıllık ticarileşme raporu; komisyon sonrası gelir en az 2,2 milyon TL (taban 2,83 milyon TL)
 
-[Not] Form kısıtı: 16 satır; üç sütun en çok 100 karakter. Proje: 1 Ocak 2027 – 30 Haziran 2028; izleyen 5 yıl: Temmuz 2028 – Haziran 2033.
 ==============================================================================
 4.4 Başa Baş Noktası Analizi
 ==============================================================================
-[Not] Tablo 4.4-1 Gelirler
 Satılan ürün adedi (Ürünün toplam satış adedine ilişkin öngörünüzü bu kısımda veriniz.) | 57.683 ücretli kullanıcı-ay, 78 ay toplamı
 Birim satış fiyatı (2.3’te belirtilen birim satış fiyatı öngörünüzü yazınız.) | TL 89,61 ağırlıklı ortalama net fiyat, KDV hariç; gösterim yuvarlanmıştır (4.1)
 Satış gelirleri (Toplam satış geliri öngörünüzü bu kısımda veriniz. Satış adedi ile birim satış fiyatı çarpımını bu kısma aktarınız.) | TL 5.168.973,63 57.683 × 89,61 TL
 Diğer gelirler (Proje sırasında ve projenin devamında elde edilmesi öngörülen başka gelir kalemleri varsa bu kısımda belirtiniz.) | TL 4.130.319,00 filo lisansı 2.593.125 + Silver reklamı 1.537.194
 Toplam gelirler (Bütün gelir kalemlerinin toplamını bu kısımda belirtiniz). | TL 9.299.292,63 Ek-D ile uyumlu toplam
 
-[Not] Tablo 4.4-2 Değişken maliyetler
 Personel maliyeti (Birim üretim için personel maliyetini belirtiniz.) | TL 0,00 personel sabit giderdir (Tablo 4.4-3)
 Malzeme maliyeti (Birim üretim için malzeme maliyetini belirtiniz.) | TL 0,00
 Enerji maliyeti (Birim üretim için enerji maliyetini belirtiniz.) | TL 0,00
@@ -274,18 +266,15 @@ Dağıtım maliyeti (Birim üretim için nakliye, dağıtım vb. maliyeti belirt
 Diğer değişken maliyet (Ürünle ilgili diğer birim değişken maliyetleri belirtiniz.) | TL 14,67 teknik-servis (kullanım bazlı sunucu/API)
 Birim ürün maliyeti (Bütün birim üretim maliyetlerinin toplamını bu kısımda belirtiniz.) | TL 28,11 form toplamı
 
-[Not] Tablo 4.4-3 Sabit maliyetler
 Makine ve teçhizat yatırımları (Ürünün üretilmesi ile ilgili makine ve teçhizat yatırımları bu kısımda belirtilmelidir.) | TL 75.000,00 plandaki yuvarlak değer (75 bin TL)
 Bina amortisman giderleri (Ürünün üretilmesi ile ilgili inşaat vb. yatırımın amortisman bedeli bu kısımda belirtilmelidir.) | TL 0,00
 Kira giderleri (Üretim tesisi, makine, cihaz vb. kira giderleri bu kısımda belirtilmelidir. ) | TL 760.000,00 sunucu ve altyapı (formda kira kalemi); plandaki yuvarlak değer (0,76M TL)
 Diğer sabit maliyetler (Genel yönetim giderleri vb. sabit giderler bu kısımda belirtilmelidir.) | TL 14.517.377,00 personel+SGK, genel yönetim, trafik lisansı, pazarlama (2.4)
 Toplam sabit maliyet (Bütün sabit maliyet kalemlerinin toplamını bu kısımda belirtiniz.) | TL 15.352.377,00 form toplamı; 78 ay
 
-[Not] Tablo 4.4-4 Başa baş analizi
 Kar marjı (Tablo 4.4.1’de belirtilen birim satış fiyatı ile Tablo 4.4.2’de belirtilen birim üretim maliyeti arasındaki farkı bu kısma aktarınız.) | TL 61,50 89,61 − 28,11
 Satılan ürün adedi olarak başa baş noktası (Tablo 4.4.3’te belirtilen toplam sabit maliyetin kar marjına bölümünü bu kısımda belirtiniz.) | 249.632,15 ≈249,6 bin kullanıcı-ay (öngörü: 57.683); yorum 4.5’te
 
-[Not] Formda varsayımlar için ayrı bir alan yoktur; tablo varsayımları 2.3, 2.4, 4.1 ve 4.5 alanlarına işlenmiştir. Değerlerin altındaki gri açıklamalar yalnızca Word taslağı içindir; forma yalnızca sayılar girilir.
 ==============================================================================
 4.5 Yatırımcı İlişkileri
 ==============================================================================
@@ -296,7 +285,6 @@ Yatırım kapıları. Ay 6’da kullanıcı edinimi, aktivasyon, elde tutma ve d
 Başa baş ve sermaye ihtiyacı. Tablo 4.4 formülüne göre yalnız ücretli bireysel abonelik üzerinden başa baş eşiği yaklaşık 249,6 bin kullanıcı-aydır; filo ve reklam katkısı dikkate alındığında eşik yaklaşık 210 bin kullanıcı-aya iner (Ek-D). Taban senaryo 78 ay içinde kümülatif nakit başa başına ulaşmadığından büyüme döneminde dış finansman ihtiyacı kabul edilmektedir. Monte Carlo modelinde aylık faaliyet başa başı olasılığı %49,4, kümülatif nakit başa başı olasılığı %4,4’tür.
 Çıkış yaklaşımı. Kısa vadeli amaç şirket satışı değil, bağımsız büyüme ve ürün-pazar uyumunun doğrulanmasıdır. Orta/uzun vadede olası stratejik alıcılar harita/navigasyon sağlayıcıları, motosiklet teknolojisi ve ekipman şirketleri, mobilite platformları ile filo/lojistik yazılım şirketleridir; Russmedia’nın calimoto’nun %51’ini (2022), Cardo’nun Riser’ı (2023) ve Comoto’nun REVER’i satın alması kategori örnekleridir. Çıkış kararı değerlemeyle birlikte kurucu payları, yatırımcı getirisi, ürünün devamlılığı ve kullanıcı tabanının korunması değerlendirilerek alınacaktır.
 
-[Not] 5 Risk Yönetimi
 ==============================================================================
 5.1 Projenin Yürütülmesi Sırasında Karşılaşılabilecek Riskler ve Alınacak Önlemler
 ==============================================================================
@@ -307,5 +295,3 @@ Ticari (kurumsal): Pilot ortağı bulunamayabilir; çok taşıtlı alıcı havuz
 Mali: BİGG yatırımı ve kurucu sermayesi Ek-E takvimine göre Ay 12 sonuna kadar yeter (düz dağıtımda Ay 9); ek finansman gecikebilir ve kullanıcı edinme maliyeti planı aşabilir. | Melek/devam yatırım görüşmeleri Ay 6'da başlatılır; aylık nakit pisti ve CAC izlenir; kurucu ücretleri ve pazarlama harcaması onaylı bütçeye göre yönetilir. | Yüksek | Yüksek | Ek finansman sağlanamazsa zorunlu olmayan işe alım, içerik/pazarlama ve ölçekleme harcamaları ertelenir; ürün kapsamı çekirdek navigasyon ve doğrulama işlerine öncelik verecek şekilde daraltılır.
 Hukuki/uyum: Patent/sağlayıcı koşulları bazı yöntemleri sınırlayabilir; KVKK, etik, sızma testi veya mağaza onayları soft launch ve veri toplamayı geciktirebilir. | Ay 1-3 faaliyet serbestliği görüşü; hukuk/KVKK ve mağaza hazırlıkları erkenden başlatılır; sızma testi ve onay süreçleri aylık izlenir. | Orta | Yüksek | Riskli yöntem alternatif teknik tasarımla değiştirilir, lisanslama değerlendirilir veya özellik kapsamdan çıkarılır. Onay gecikirse yalnız ilgili özellik/veri toplama ertelenir; güvenli çekirdek test sürdürülür.
 İdari/teknik süreklilik: Yazılım mimarisi ve altyapı bilgisinin önemli bölümü CTO'da yoğunlaşmıştır; kurucu erişilebilirliği veya görev değişimi takvimi etkileyebilir. | Kod ve mimari dokümantasyonu, runbook'lar, kod incelemesi, ortak erişimler ve düzenli bilgi aktarımı; kritik sistemlerde en az iki kurucunun erişimi. | Orta | Yüksek | Kritik görevler kurucu ekip içinde yeniden dağıtılır; teknik bilgi yedeklenir, dış geliştirici desteği alınır ve takvim riski oluşursa düşük öncelikli özellikler sonraki faza kaydırılır.
-
-[Not] Form kısıtı: 6 satır; Risk Tanımı ve Önlemler en çok 200, B Planı en çok 250 karakter; Olasılık/Etki: Düşük – Orta – Yüksek.
