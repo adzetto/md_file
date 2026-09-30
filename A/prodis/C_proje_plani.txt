@@ -1,0 +1,220 @@
+PRODİS C. Proje Planı — İş paketleri ve ara çıktılar
+Kaynak: İş Planı 4.3 (kritik iş adımları), Ek-A A.9 (doğrulama protokolü), Ek-I I.12–I.13 (etik kurul, sızma testi), Ek-J Tablo J-4 ve J-8 (kritik hata listesi, kilometre taşları), Ek-K K.12 (pilot takvimi), Ek-E (Ay 1 = Ocak 2027, Ay 18 = Haziran 2028).
+Tarih kuralı: Proje dönemi 01.01.2027 – 30.06.2028. Şirket kuruluşu, YPSS, fikri mülkiyet devri ve marka başvurusu Aralık 2026'da (Ay 0) proje başlangıcından önce tamamlanır; İP-1'in faaliyet listesinde ön koşul olarak anılır.
+İlgili Kuruluşlar alanı: GİRİŞİMCİLER İÇİN GEÇİCİ KURULUŞ (varsayılan; şirket kurulmamıştır).
+
+################################################################################
+İP-1 | Hukuki altyapı, KVKK paketi, etik kurul kararı ve bağımsız sızma testi
+Başlama: 01.01.2027 | Bitiş: 31.03.2027
+################################################################################
+
+--- Faaliyetler ---
+Ön koşul (Aralık 2026, proje öncesi): MotoMap A.Ş. kuruluşu, Yatırım ve Pay Sahipleri Sözleşmesi, üç kurucunun mevcut fikri mülkiyeti şirkete bedelsiz devri ve 9, 39 ve 42. sınıflarda marka başvurusu. Bu adımlar proje başlangıcından önce tamamlanır; iş paketi bunların çıktıları üzerine kurulur.
+
+1. Etik kurul süreci. Sorumlu araştırmacı olarak akademik danışmanın kurumu (İYTE) birinci yoldur; Kasım–Aralık 2026'da yapılan başvurunun düzeltme döngüsü Ocak 2027'de tamamlanır, karar hedefi Şubat 2027'dir. Karar 15 Mart 2027'ye kadar alınamazsa ikinci yol (Üsküdar Üniversitesi Girişimsel Olmayan Araştırmalar Etik Kurulu) devreye girer ve kurye pilotu bir ay kayar. Karar alınana kadar üçüncü kişilerin sürüş verisi araştırma amacıyla toplanmaz.
+2. KVKK paketi. Veri envanteri, işleme amaçları ve hukuki sebep tablosu, saklama ve imha takvimi, aydınlatma ve onam metinleri, üçüncü taraf veri akış envanteri hukuk danışmanı incelemesinden geçirilir; hukuki metinlerdeki tüzel kişi alanları doldurulur. Sunucunun yurt dışında (Litvanya) barındırılması için yurt içine taşıma ya da Kurulun standart sözleşmesinin imzalanıp beş iş günü içinde bildirilmesi kararı verilir ve uygulanır. Sürüş kaydı açık rızası sunucu tarafında kayıt altına alınır; 5651 kapsamında topluluk ve mesajlaşma için yaş kapısı eklenir.
+3. Güvenlik düzeltmeleri. Eylül 2026 iç güvenlik incelemesinin açık bulguları kapatılır: ödeme bütünlüğü, bölge adı kısıtı ve sürücü kimliğinin gizlenmesi düzeltmelerinin ana dala alınması; yerel kopyadaki commit'lerin uzak depoya gönderilmesi; iki adımlı doğrulama, dal koruması ve sır yönetimi; ücretli dış servis çağrılarında oturum koşulu, hız sınırı ve bütçe alarmı; parola sıfırlamanın üretimde çalışır hâle getirilmesi; şifreli saha dışı yedek ve geri yükleme tatbikatı.
+4. Bağımsız sızma testi. Aralık 2026–Ocak 2027'de kapsam ve çalışma kuralları imzalanır; Şubat 2027'de API, iOS, Android, altyapı ve internet sitesi test edilir; Mart 2027'de düzeltme ve yeniden test yapılır.
+5. Fikri mülkiyet ve lisans. Patent vekilinden faaliyet serbestliği görüşü alınır (Ay 1–3; öncelikle HERE'in EP3648077B1 kaydı). Canlı trafik sağlayıcısıyla ticari lisansta saklama, model kullanımı ve OSM eşlemesi hükümleri Ay 1'de yazılı hâle getirilir. Depolardaki lisans dosyaları ve kullanım koşulları iş planındaki kapalı kaynak konumuyla uyumlu hâle getirilir.
+
+Sorumlular: CEO (koordinasyon, hukuk ve marka süreçleri), CTO (güvenlik düzeltmeleri, sızma testi, rıza kaydı), akademik danışman (etik kurul başvurusu), hukuk danışmanı (KVKK metinleri).
+
+--- Yöntemler ve parametreler ---
+Etik kurul başvurusu TÜBİTAK 1812-2026-2 Çağrı Duyurusu §5.1(3) uyarınca planlanmıştır. Başvuru dosyası araştırma protokolü (doğruluk ölçüm yöntemi ve kurye pilotu analiz planı), veri yönetim planı, bilgilendirilmiş onam formları, KVKK aydınlatma metinleri, anket ve görüşme soru setleri ile katılımcı güvenlik kurallarından oluşur. Onaydan önce yapılan görüşmeler ticari müşteri keşfi sayılır; notlarda kişisel veri tutulmaz ve bu notlar araştırma verisine katılmaz.
+
+KVKK uygulaması 6698 sayılı Kanun m.4/2 ilkelerine ve Kurulun 2026/347 sayılı ilke kararına dayanır. Navigasyon için anlık konum m.5/2-c ile işlenir; sürüş kaydı açık rızaya bağlıdır ve rıza verilmemesi navigasyonu etkilemez; reklam kimliği yalnız açık rızayla, iOS'ta ayrıca App Tracking Transparency izniyle işlenir. Hukuki sebep her amaç için ayrı belirlenir; "öneri" olarak işaretlenen saklama süreleri hukuk danışmanının onayına sunulur. VERBİS kaydı, şirket kurulduğunda çalışan sayısı ve bilanço ölçütlerine göre değerlendirilir.
+
+Sızma testi OWASP ASVS 5.0.0 Düzey 2 (API, altyapı, site) ve OWASP MASVS 2.1.0 ile MASTG 2.0.0 (mobil) kapsamında, geliştirme ekibinden bağımsız bir kuruluş tarafından, gerçek kullanıcı verisi içermeyen test ortamında yapılır. Bulgular CVSS 3.1 puanıyla raporlanır.
+
+İzlenecek parametreler: etik kurul karar tarihi; hukuk danışmanı onayından geçen metin sayısı; yurt dışı aktarım kararının uygulanma tarihi; kapatılan iç güvenlik bulgusu sayısı ve önem düzeyi; sızma testinde açık yüksek ve kritik bulgu sayısı; orta bulgular için tarihli düzeltme planı; faaliyet serbestliği görüşünün sonucu ve riskli görülen yöntem sayısı.
+
+--- Deney, test ve analizler ---
+1. Sızma testi 1 (Şubat 2027): kimlik doğrulama, oturum ve belirteç yönetimi; nesne ve işlev düzeyinde yetkilendirme (başka kullanıcının rota geçmişine, sürüş kaydına, mesajına ve fotoğrafına erişim denemeleri); girdi doğrulama; hız sınırı ve ücretli dış servis uçlarının kötüye kullanımı; dosya yükleme; hesap silmenin tamlığı; parola sıfırlama; mağaza kanıtlarının sunucuda doğrulanması ve iade bildirimleri; mobilde cihaz üstü saklama, sertifika doğrulama, konum izninin kapsamı ve sürüş kaydının rızasız başlamaması; Meta ve Google SDK'larının ağ trafiği.
+2. Yeniden test (Mart 2027, kapalı betadan önce). Kabul ölçütü: açık yüksek ve kritik bulgu sayısı 0. Bu ölçüt sağlanmadan kapalı beta açılmaz.
+3. Veri ihlali masa başı tatbikatı (kapalı betadan önce): 72 saatlik Kurul bildirimi, ilgili kişilere bildirim ve pilot askıya alma adımlarının senaryo üzerinde denenmesi.
+4. Geri yükleme tatbikatı: şifreli saha dışı yedekten veritabanının geri yüklenmesi ve sürüm geri alma denemesi.
+5. Hukuki metin denetimi: aydınlatma ve açık rıza metinlerinin ayrı sunulduğunun, hizmetin rızaya bağlanmadığının ve mağaza gizlilik beyanlarıyla tutarlılığın kontrol listesiyle doğrulanması.
+6. Lisans envanteri: açık kaynak ve üçüncü taraf bileşenlerin lisanslarının ticari kullanıma uygunluk açısından taranması; depolardaki lisans ve kullanım koşulu metinlerinin güncellenmesi.
+
+################################################################################
+İP-2 | Prototipin ürünleştirilmesi, kritik hataların kapatılması ve kapalı beta
+Başlama: 01.01.2027 | Bitiş: 31.03.2027
+################################################################################
+
+--- Faaliyetler ---
+1. Rota motoru. İstanbul için Anadolu Yakası ağının tanımlanması ve işçi başına bellek gereksiniminin üretim sunucusuna sığacak düzeye düşürülmesi (bugün rota yolunda 5,6–6,0 GB; konteyner sınırı 3 GB). İzmir metro tanımının açılması, İzmir ağının yüklenmesi ve canlı trafik eşlemesinin üretimde doğrulanması. Ülke geneli yedek ağın ana dala alınması ve üretimdeki durumunun doğrulanması.
+2. Mobil uygulama. Kullanıcı içeriği için şikâyet, engelleme ve iletişim arayüzü (mağaza kurallarının zorunlu kıldığı işlevler); iOS yerel derlemesinin iOS 26 SDK ile alınması ve yerel iOS harita anahtarı; Apple ile oturum açma belirteçlerinin hesap silinirken iptali; ekran kapalıyken sürüş kaydı, gidilen ve kalan yol ayrımı, klavye ve güvenli alan davranışının gerçek cihazlarda doğrulanması.
+3. Mağaza ve abonelik. Şirket adına Apple ve Google geliştirici hesapları; App Store gizlilik etiketleri ve yaş derecelendirmesi; Google Play veri güvenliği formu; ön plan konum servisi beyanı ve videosu; satın almanın hesaba bağlanması ve test satın almalarının üretim hakkından ayrılması; yayındaki abonelik koşullarının katalogla uyumlu hâle getirilmesi.
+4. Kapalı beta. TestFlight ve Google Play kapalı test kanallarının açılması; İstanbul (Anadolu Yakası) ve İzmir'de kalibrasyon yayını; ödeme duvarı olay kaydının ve dönüşüm hunisinin devreye alınması (Mart 2027'den itibaren).
+5. Tanıtım ve ürün metinleri. Yayındaki abonelik koşullarının katalogdan çıkarılmış özellikleri saymaması; mağaza sayfası, ekran görüntüleri ve destek adresi.
+
+Sorumlular: CTO (rota motoru, mobil, sunucu, mağaza hazırlığı), kurucu ortak Hamidreza Khalaj Zahraei (yol ağı parametreleri, İzmir ağı değerlendirmesi), CEO (geliştirici hesapları, mağaza beyanları, beta kullanıcı koordinasyonu).
+
+--- Yöntemler ve parametreler ---
+Rota motoru OpenStreetMap yol ağını kenar genişletilmiş çizgeye dönüştürür; dönüş yasakları çizgede bulunmayan bağlantı olarak yapısal biçimde uygulanır. Rota hesabı özelleştirilebilir daraltma hiyerarşisiyle (CCH) yapılır; yol ağı bir kez sıralanır, canlı trafik değiştikçe yalnız ağırlıklar yeniden hesaplanır. Canlı trafik, sağlayıcının yol parçası hızlarının OSM bağlantılarına en çok 45 m mesafe ve 35° yön farkı ölçütüyle eşlenmesiyle alınır; trafik dönemi 180 saniyedir. Varış süresi canlı otomobil hızlarına motosiklete özgü hız farkı uygulanarak hesaplanır; farkın başlangıç değerleri varsayımdır ve saha kalibrasyonuyla (İP-4) güncellenir.
+
+Bellek çalışması, üretim sunucusunda (8 GB) işçi başına bellek ölçümüyle yürütülür; hedef, Anadolu Yakası ve İzmir ağlarının API konteyner sınırı içinde çalışmasıdır. Ülke geneli yedek ağ canlı trafik, eğim ve şerit ölçüsü içermez; yalnız teknik sınama içindir.
+
+Mobil uygulama Flutter ile, sunucu FastAPI ile geliştirilir. Mağaza hazırlığı App Store İnceleme Kuralları 1.2 ve Google Play kullanıcı içeriği kurallarına göre yürütülür; 13.11.2023'ten sonra açılan kişisel Play hesapları için 12 test kullanıcısıyla 14 günlük kesintisiz kapalı test kuralı, kuruluş hesabının muafiyeti doğrulanana kadar sağlanacak biçimde planlanır.
+
+İzlenecek parametreler: işçi başına bellek (GB); İstanbul Anadolu Yakası ve İzmir ağlarının düğüm ve bağlantı sayısı ile kurulum süresi; canlı trafik eşlemesinin ağ kapsamı (Kadıköy'de %44,9; İzmir için ilk ölçüm); kapatılan kritik hata sayısı (Tablo J-4'te Mart 2027 hedefli 20 madde); gerçek cihaz testi geçen senaryo sayısı; kapalı beta kullanıcı sayısı ve kesintisiz test günü.
+
+--- Deney, test ve analizler ---
+1. Rota tutarlılık testleri: Anadolu Yakası ve İzmir ağlarında derlenmiş CCH'nin Dijkstra referansıyla, dönüş kısıtlı hiyerarşinin dönüş farkındalıklı Dijkstra ile rastgele sorgu çiftlerinde karşılaştırılması (Kadıköy'de 40/40 ve 30/30 sonucu veren yöntem). Kabul: sapma sıfır.
+2. Dönüş kısıtı kapsam analizi: OSM'den çekilen kısıt ilişkilerinin dizine alınan payı (Kadıköy'de 82 ilişkinin 50'si); uygulanmayan ilişki türlerinin sınıflandırılması ve kapsamın genişletilmesi.
+3. Bellek ve ısınma ölçümü: süreç yeniden başladıktan sonraki ilk istek süresi (bugün yaklaşık 8 saniye); ön yükleme açıkken ve kapalıyken karşılaştırma.
+4. Yük testi: tek kullanıcı ve 100 eşzamanlı kullanıcıda medyan, p95 ve p99 yanıt süresi ile hata oranı (Temmuz ve Eylül 2026 ölçümlerinde medyan 39 ms ve 2,5 s; p95, p99 ve hata oranı bu kez kaydedilir).
+5. Çok duraklı sıralama testi: 3, 5 ve 7 duraklı örneklerde Held–Karp sonucunun bütün sıralamaları deneyen referansla karşılaştırılması; 12 durak sınırında çalışma süresi ölçümü.
+6. Gerçek cihaz kabul testleri: iOS ve Android'de ekran kapalı sürüş kaydı, sesli yönlendirme, gidilen ve kalan yol ayrımı, iPad düzeni ve en büyük erişilebilirlik yazı boyunda ekran denetimi.
+7. Mağaza ön inceleme denemesi: TestFlight ve Play kapalı test kanallarına yükleme; inceleme geri bildirimlerinin kaydı.
+8. Hesap silme tamlık testi: silme sonrasında bağlı kayıtların, yüklenen dosyaların ve belirteçlerin kalmadığının doğrulanması.
+
+################################################################################
+İP-3 | MVP ve sınırlı yayın (soft launch), mağaza yayını, ilk 1.000 yükleme ve dönüşüm ölçümü
+Başlama: 01.04.2027 | Bitiş: 30.09.2027
+################################################################################
+
+--- Faaliyetler ---
+1. Mağaza yayını. App Store ve Google Play'de MVP yayını (hedef Haziran 2027, Ay 6). Yayından önce mağaza derlemeleri ile reklam ve ödeme değişiklikleri için sızma fark testi (Mayıs–Haziran 2027).
+2. Kalan ürün işleri. Canlı ölçüm olmayan yol parçalarında serbest akış katmanının süreyi uzun kestirmesinin ve kavşak gecikmesinin ele alınması; 100 eşzamanlı kullanıcıda 1 saniyenin altına inme hedefi; abonelik kataloğunun iş planındaki paket tanımına (Gold bir topluluk, Platinum birden fazla topluluk, Silver reklamlı) uyarlanması; web ödeme yolunun kapatılması ya da yurt içi ödeme kuruluşuyla kurulması; reklam SDK'sının seçimi ve yalnız sürüş dışı ekranlarda gösterim.
+3. Kullanıcı edinimi. İlk 1.000 yükleme; organik kanallar, motosiklet toplulukları ve tanıtım sitesi bekleme listesi; performans pazarlaması bütçesi dönüşüm verisi doğrulanmadan ölçeklenmez.
+4. Ölçüm. Aktivasyon, 30 günlük elde tutma ve ödeme dönüşümü; Gold'dan Platinum'a yükseltme ölçümü; ödeme duvarı deneyleri. Örneklem yetersiz kalırsa dönüşüm raporu en geç Eylül 2027'de (Ay 9) tamamlanır.
+5. Fiyat ve kullanım anketi. Etik kurul kararından sonra Mart–Mayıs 2027'de en az 150 sürücü ve 100 esnaf ya da bağımsız kuryeyle anonim çevrim içi anket; Gold ve Platinum fiyat duyarlılığı ayrı gruplarda monadik olarak test edilir.
+6. Melek yatırım görüşmeleri Ay 6'daki ilk kullanıcı verileriyle başlatılır.
+
+Sorumlular: CTO (yayın, reklam SDK'sı, katalog, performans), CEO (kullanıcı edinimi, ödeme hunisi deneyleri, anket, yatırımcı görüşmeleri), kurucu ortak Hamidreza Khalaj Zahraei (serbest akış katmanı ve kavşak gecikmesi modeli).
+
+--- Yöntemler ve parametreler ---
+Sınırlı yayın, ürünün kritik hatalar kapatılmış hâliyle iki şehirde (İstanbul Anadolu Yakası ve İzmir) mağazalara açılmasıdır; Türkiye genelinde tanıtım yapılmaz. Dönüşüm ölçümü uygulama içi ödeme duvarı olaylarıyla yapılır; olay kaydında olay adı, özellik, plan, mağaza ve uygulama sürümü tutulur, e-posta, konum ve cihaz kimliği tutulmaz. Ürün ölçümü üçüncü taraf analitik SDK'sı olmadan, birinci taraf olay kaydıyla yürütülür.
+
+Fiyat anketi kolayda örneklemle yürütülür ve Türkiye geneline genellenmez; monadik testte hücre başına 25 yanıtta hata payı ±19,6 yüzde puandır. Beyan edilen niyet davranıştan yüksek çıkabileceğinden fiyat kararı ödeme duvarı verisine bağlanır. Fiyat algısı için Van Westendorp fiyat duyarlılık ölçeği kullanılır.
+
+Reklam yalnız Silver katmanında ve sürüş dışı ekranlarda gösterilir; aktif sürüşte reklam yoktur. Kişiselleştirilmiş reklam yalnız açık rızayla ve iOS'ta ATT izniyle sunulur; seçilecek SDK'nın rızasız kipte topladığı veri envantere işlenir.
+
+İzlenecek parametreler: yükleme sayısı; aktivasyon oranı; 30 günlük elde tutma; Silver'dan Gold ve Platinum'a ödeme dönüşümü; Gold'dan Platinum'a yükseltme oranı (model değeri: ödeyenler içinde Platinum payı yaklaşık %13,81, yalnız karşılaştırma içindir); kullanıcı başına reklam geliri; mağaza inceleme süresi ve ret nedenleri; 100 eşzamanlı kullanıcıda medyan yanıt süresi; anket yanıt sayısı (hedef 150 sürücü, 100 kurye). Göstergeler Ay 3'ten itibaren aylık izlenir; canlı veri oluşmadan hedef konmayan göstergelerde eşik ilk ölçümden sonra yazılı olarak belirlenir.
+
+--- Deney, test ve analizler ---
+1. Ödeme duvarı deneyleri: Silver'dan ücretli katmana geçiş ekranında paket sunumu ve fiyat gösterimi varyantlarının dönüşüm oranına etkisi; Gold'dan Platinum'a yükseltme ekranını görenlerin 30 günde geçiş oranı.
+2. Dönüşüm hunisi analizi: yükleme, kayıt, ilk rota, ilk sürüş kaydı onayı, ödeme duvarı görüntüleme ve satın alma adımlarında kayıp oranları; 30 günlük elde tutma kohortları.
+3. Fiyat anketi analizi: Gold ve Platinum için monadik kabul oranları, Van Westendorp kabul edilebilir fiyat aralığı; sürücü ve kurye gruplarının ayrı raporlanması.
+4. Performans testi: 100 eşzamanlı kullanıcıda medyan yanıt süresinin 1 saniyenin altına indiğinin, p95 ve p99 ile birlikte ölçülmesi.
+5. Serbest akış katmanı testi: canlı ölçüm olmayan koridorlarda kestirilen sürenin kurucu sürüşleriyle karşılaştırılması (Eylül 2026 iç taramasında 15 koridorun 14'ünde uzun kestirim).
+6. Sızma fark testi: mağaza derlemeleri ile reklam ve ödeme değişikliklerinin bağımsız kuruluşça yeniden testi; kabul ölçütü açık yüksek ve kritik bulgu 0.
+7. Reklam SDK'sı veri akışı denetimi: seçilen SDK'nın rızasız kipte ağ trafiğinin incelenmesi; konum ve sürüş verisinin aktarılmadığının doğrulanması.
+8. Mağaza uyum denetimi: gizlilik etiketleri, veri güvenliği formu ve ön plan konum beyanının uygulama davranışıyla karşılaştırılması.
+
+################################################################################
+İP-4 | Saha varış süresi doğrulaması, hız farkı modelinin kalibrasyonu ve çok şehirli genişleme
+Başlama: 01.03.2027 | Bitiş: 30.06.2028
+################################################################################
+
+--- Faaliyetler ---
+1. Protokolün ikinci sürümü. 10.08.2026 tarihli doğruluk protokolünün tabakalar, ek dahil etme kuralları ve kalibrasyon ile kabul verisinin ayrılığı yönünden akademik danışmanla kesinleştirilmesi; analiz planıyla birlikte ilk araştırma sürüşünden önce zaman damgalı kayda alınması.
+2. Veri toplama. Etik kurul kararından sonra rızalı sürüş kaydı: yaklaşık 10 metrede bir, dururken en geç 15 saniyede bir nokta; her sürüşte kalkış anında MotoMap motosiklet varış süresi ve aynı trafik katmanından üretilen referans otomobil varış süresi kaydedilir. Sürüş kaydı varsayılan olarak kapalıdır ve rızaya bağlıdır.
+3. Doğruluk Raporu 1 (Haziran 2027, Ay 6): İstanbul ve İzmir'de en az 300 geçerli sürüş; Kapı-1 yazılı devam ya da iyileştirme kararı; THS 6 beyanı bu ölçüte bağlıdır.
+4. Saha kalibrasyonu ve ürün olgunlaştırma (Eylül 2027, Ay 9): İstanbul ve İzmir'de 200 rotada yasallık denetimi; hız farkı modelinin bölge, sıkışıklık düzeyi ve saat hücrelerine göre kalibrasyonu; İstanbul kapsamının Anadolu Yakası'ndan il geneline genişletilmesi.
+5. Doğruluk Raporu 2 (Aralık 2027, Ay 12): 360 geçerli sürüş; Kapı-2; THS 7.
+6. Antalya'nın eklenmesi (Mart 2028, Ay 15): etik kurula değişiklik bildirimi; Antalya ağının kurulması; bölgesel varış süresi verisi ve üç ilde model performansı raporu.
+7. Doğruluk Raporu 3 (Haziran 2028, Ay 18): İstanbul, İzmir ve Antalya'da toplam 1.000 geçerli sürüş; Kapı-3; THS 8.
+
+Sorumlular: CTO (doğrulama altyapısı, sürüş kaydı, ağ genişletme), kurucu ortak Hamidreza Khalaj Zahraei (hız farkı modeli, sonuç analizi), akademik danışman (protokol, doğrulama yaklaşımı), CEO (kapı kararlarının kaydı ve TÜBİTAK raporlaması).
+
+--- Yöntemler ve parametreler ---
+Ölçüm birimi tek sürüştür. Tahmin, kalkışta sürücüye gösterilen varış süresi; gerçek süre, sürüş kaydının ilk ve son noktası arasında geçen süredir ve MotoMap'in kendi GNSS kayıtlarından alınır. Hata, gerçek süre eksi tahmindir. Birincil ölçüt ortalama mutlak yüzde hatadır (MAPE); medyan, simetrik ve süre ağırlıklı yüzde hata, işaretli yanlılık (saniye) ve kök ortalama kare hata birlikte raporlanır. Güven aralıkları sabit tohumlu (20260810) önyükleme yöntemiyle, 5.000 yeniden örneklemeyle hesaplanır; sürüş sayısı 20'nin altındaki sonuç "ölçüldü" olarak yayımlanmaz.
+
+Tabakalar il (İstanbul, İzmir, Mart 2028'den itibaren Antalya), sıkışıklık düzeyi (serbest: ölçülen hız serbest akış hızının en az %80'i; orta: %50–80; yoğun: %50'nin altı) ve yoğun ya da sakin saat (hafta içi 07.00–10.00 ve 16.00–20.00) birleşimiyle üç il için 18 hücredir. Motor sınıfı, hava, mevsim, koridor tipi, sürücü tipi ve yolculuk uzunluğu ikincil etken olarak raporlanır.
+
+Dahil etme kuralları kodla uygulanır ve ayıklanan her sürüş nedeniyle raporlanır: beşten az noktalı, sıfır süreli, sinyal kesintisi ölçülemeyen, tahmini bulunmayan, tahmin ile kalkış arasında 180 saniyeden fazla geçen ve sürüşten sonra damgalanmış kayıtlar geçersizdir; ikinci sürümde varış noktasına 150 m yakınlık, rotaya uyum (%80), en az 5 dakika ve 1,5 km yolculuk ve nokta yatay doğruluğu medyanı en fazla 20 m kuralları eklenir.
+
+Kalibrasyon ve kabul verisi ayrılır: takvimin son dörtte biri ve bir ilçe kalibrasyona alınmaz; kapı kararları bu ayrılmış veriyle verilir. Kalibrasyon ilçe ya da koridor bloklarıyla ayırma, zamansal ileri doğrulama ve sürücü gruplu ayırmayla sınanır; bir ilde kalibre edilen model diğer illerde önce yeniden kalibre edilmeden sınanır. Her kapı raporu protokol sürümünü, girdi dosyasının SHA-256 özetini, ayıklama dökümünü ve hücre tablosunu içerir; olumsuz sonuç da raporlanır.
+
+İzlenecek parametreler: geçerli sürüş sayısı (il ve hücre bazında); MAPE ve eşlik eden ölçütler; referans otomobil varış süresine göre eşleştirilmiş hata azalması; hücre başına kalibre edilmiş hız farkı ve güven aralığı; yasallık denetiminde ihlal sayısı; kalibrasyon ve kabul kümelerinde performans farkı.
+
+--- Deney, test ve analizler ---
+1. Kapı-1 (Haziran 2027): en az 300 geçerli sürüşte MAPE ≤%25; Kapı-2 (Aralık 2027): 360 sürüşte MAPE ≤%18; Kapı-3 (Haziran 2028): 1.000 sürüşte MAPE ≤%15. Aynı sürüşlerde motosiklet farkı eklenmemiş otomobil süresi baseline olarak raporlanır ve motosiklet modelinin sağladığı hata azalması eşleştirilmiş karşılaştırmayla verilir.
+2. Yasallık denetimi (Eylül 2027): İstanbul ve İzmir'de koridor tipi ve motor sınıfına göre tabakalı 200 rotada her manevranın OSM kısıtları, açık lisanslı sokak görüntüsü ve gerektiğinde saha kontrolüyle karşılaştırılması. Yasak dönüş, ters yön, motosiklete kapalı yol ve mopedin otoyola yönlendirilmesi ihlal sayılır; kabul 0 ihlal.
+3. Hız farkı kalibrasyonu: hücre bazında motosiklet hızı ile aynı noktadaki otomobil hızı oranının kestirimi; kalibrasyon kümesinde uydurma, kabul kümesinde sınama; ilçe blokları ve zamansal ileri doğrulama ile aşırı uydurma denetimi.
+4. Taşınma analizi: İstanbul'da kalibre edilen modelin İzmir ve Antalya'da yeniden kalibre edilmeden sınanması; il bazında performans farkının raporlanması.
+5. Kuru deneme (etik kurul kararından önce): doğruluk ölçüm hattının yalnız kurucu sürüşleriyle uçtan uca çalıştırılması; bu veri raporlara katılmaz.
+6. Antalya ön analizi (Mart 2028): bölgesel varış süresi verisinde farklı yol ve trafik koşullarında model performansı; üç il birlikte değerlendirilir.
+7. Karşı hipotez denetimi: iki yönlü sapmanın (kent içi sıkışıklıkta motosiklet süresinin kısa, açık yolda düşük hacimli motosiklet için uzun kalması) hücre bazında doğrulanması; aksi bulgu raporlanır.
+
+################################################################################
+İP-5 | Kurye ölçüm pilotu, filo ürünü ve kurumsal kanal
+Başlama: 01.01.2027 | Bitiş: 30.06.2028
+################################################################################
+
+--- Faaliyetler ---
+1. Müşteri keşfi (Ay 1–3). 60 işletmelik hedef listenin tamamlanması; 15–20 keşif görüşmesi (Haziran 2027'ye kadar); satın alma kararını kimin verdiği, bugünkü planlama yöntemi ve ödeme isteği sorulur. İlk pilot ortağının seçimi ve niyet mektubu.
+2. Pilot hazırlığı (Mart–Nisan 2027). Sözleşme, taahhüt metni, kurum izin yazısı, kurye onamı, kabul testi; ön kaydın işletme ve akademik danışman tarafından imzalanıp zaman damgası alınması.
+3. Ölçüm pilotu (Nisan–Haziran 2027). Tek işletmede en az 20 kuryeyle 8 hafta: 2 hafta taban, 6 hafta müdahale. Kör analiz ve imzalı pilot raporu Haziran 2027'de (Ay 6); etik kurul kararı 15 Mart 2027'ye kadar alınamazsa pilot bir ay kayar.
+4. Filo ürünü. Kurye mobil yönlendirme ve teslimat sırası ekranı; işletme operasyon paneli; planlanan ve gerçekleşen mesafe ve süre ile durak başına mesafeyi gösteren verim raporları; kiracı yalıtımı ve rol tabanlı erişim. Kurumsal pilot ya da API açılmadan önce filo paneli sızma testi.
+5. Kurumsal satış (Temmuz 2027–Haziran 2028). Ölçüt sağlanmışsa 30 gün içinde lisans görüşmesi; ikinci–dördüncü pilotlar (İzmir dahil); Ocak 2028'de en az 20 kuryelik, 12 aylık ilk ücretli filo sözleşmesi; Ay 18'e kadar ilk API pilotu ve en az 30 kurye.
+
+Sorumlular: CEO (hedef liste, görüşmeler, sözleşmeler, pilot organizasyonu), CTO (filo paneli, API, veri işleme altyapısı), kurucu ortak Hamidreza Khalaj Zahraei (çok duraklı sıralamanın teknik geliştirilmesi), akademik danışman (ön kayıt, kör analiz), hukuk danışmanı (veri işleme sözleşmesi).
+
+--- Yöntemler ve parametreler ---
+Pilot, işletmenin veri sorumlusu, MotoMap'in veri işleyen olduğu bir veri işleme sözleşmesiyle yürütülür. Kurye verisi takma adlıdır; durak kayıtlarında alıcı adı ve telefonu bulunmaz; kurye bazında hız ya da performans raporu verilmez ve göstergeler kuryeleri hıza göre sıralamak için kullanılmaz. Ürün teslim süresi taahhüdü vermez.
+
+Ön kayıt amaç, katılım ölçütleri, kura yöntemi ve tohum, ölçüt tanımları, sıralamanın amaç fonksiyonu, birincil analiz ve başarı kuralı, duyarlılık ve taşınma analizleri, eksik veri ve uyarlama kuralları, güvenlik ve durdurma kuralları, körleme yöntemi ve ticari sonuç başlıklarını içerir; sonraki her değişiklik raporun "ön kayıttan sapmalar" bölümüne gerekçesiyle yazılır. Akademik danışman analizi veri dondurulana kadar koşul etiketlerini görmeden yapar.
+
+Sıralama, 12 durağa kadar Held–Karp ile kesin, daha fazlasında yaklaşık yöntemle ve motosiklet süre modeliyle kurulur; birincil ölçüt ise mesafedir ve iki ölçü raporda birlikte verilir. Pilot %8–10 düzeyindeki gerçek azalmayı yakalayacak biçimde boyutlandırılmıştır; gerçek azalma %5 ise başarı kuralının tutma olasılığı %5–22'dir. Yakıtı kuryenin ödediği işletmede mesafe tasarrufu işletme giderine doğrudan yansımaz; bu işletmelerde %3 eşiğinin ekonomik yorumu geçerli değildir.
+
+İzlenecek parametreler: davet edilen, onam veren, başlayan, çekilen, dışlanan ve analize giren kurye sayısı; durak başına mesafe (nokta kestirimi ve %95 güven aralığı); toplam kilometre (ham ve iş yüküne göre düzeltilmiş); teslimat başına süre ve kurye-saat başına teslimat; önerilen sıraya uyum ve sapma gerekçe kodları; haftalık güvenlik göstergeleri; 5. hafta ürün kullanımı ve SUS puanı; kurye başına aylık yakıt karşılığı; keşif görüşmesi sayısı; niyet mektubu ve sözleşme sayısı.
+
+--- Deney, test ve analizler ---
+1. Ölçüm pilotu: 2 haftalık taban döneminde işletmenin mevcut sıralamasıyla, 6 haftalık müdahale döneminde MotoMap sıralamasıyla durak başına mesafe ve toplam kilometre karşılaştırması; birincil sonuç, duyarlılık ve taşınma analizleri, ikincil ölçütler ve güvenlik koşulları; karar (başarılı, belirsiz, başarısız) ön kayıttaki kurala göre verilir.
+2. Kabul testi (pilot öncesi): işletmenin gerçek durak verisiyle sıralama ve yönlendirmenin uçtan uca çalıştırılması; durak etiketinde kişisel veri bulunmadığının denetimi.
+3. Kullanılabilirlik ölçümü: 5. haftada kurye ve dispeçer SUS anketi (500 çalışmanın ortalaması 68 ile karşılaştırma); kişiyi tanıtmayan geri bildirim.
+4. Güvenlik izleme: haftalık olay ve şikâyet kaydı; işletmeden bağımsız şikâyet kanalı; durdurma kuralları.
+5. Motorun bilmediği kısıtların analizi: sapma gerekçe kodlarından (merdiven, site girişi, aynı sokağın iki ucu gibi) yerel kısıt listesinin çıkarılması ve sıralama modeline eklenmesi.
+6. Filo paneli ve kurumsal API sızma testi: kiracı yalıtımı, rol tabanlı erişim ve kurye verisine erişim kaydı; kabul ölçütü açık yüksek ve kritik bulgu 0.
+7. Yakıt, TL ve emisyon karşılığı hesabı: ölçülen kilometre değişiminin kurye başına aylık yakıt karşılığına dönüştürülmesi; "ölçülmüş tasarruf değildir" etiketli model farkından ayrı raporlama.
+8. İkinci–dördüncü pilotlarda taşınma: farklı segment, bölge ve mevsimde sonuçların ilk pilotla karşılaştırılması.
+
+################################################################################
+İP-6 | Proje yönetimi, kapı kararları, finansman ve ticarileşmeye hazır sürüm
+Başlama: 01.01.2027 | Bitiş: 30.06.2028
+################################################################################
+
+--- Faaliyetler ---
+1. Proje yönetimi. Aylık iş programı; kod deposu, teknik raporlar ve ortak dokümantasyon üzerinden çalışma; kritik bilginin tek kişide toplanmasının önlenmesi; TÜBİTAK altışar aylık izleme ve dönem raporları (AGY312).
+2. Kapı kararları. Ay 6 (Kapı-1: doğruluk, pilot, dönüşüm), Ay 12 (Kapı-2: doğruluk ve ürün olgunluğu), Ay 18 (Kapı-3: çok şehirli doğrulama, ödeyen kullanıcı ve kurumsal pilot) yazılı kararları; olumsuz sonuçta iş planı 5.1'deki B planlarının uygulanması.
+3. Göstergeler. Ay 3'ten itibaren aylık aktif kullanıcı, dönüşüm, elde tutma, birim ekonomi, sağlayıcı faturaları ve API çağrı sayıları; varsayılan birim maliyetlerin gerçekleşen verilerle güncellenmesi; aylık nakit pisti ve müşteri edinme maliyeti takibi.
+4. Finansman. BİGG yatırımı ve kurucu sermayesiyle Ay 12 sonuna kadar pozitif nakit; kritik nakit ayı Ay 13 için en geç Ay 13 başında 744.066 TL ek finansmanın hazır olması; melek ve devam yatırımı görüşmelerinin Ay 6'da başlatılması; sağlanamazsa zorunlu olmayan işe alım ve pazarlama harcamalarının ertelenmesi.
+5. Ticarileşmeye hazır sürüm (Haziran 2028). Üç ilde doğrulanmış varış süresi modeli, kritik hata 0, en az 70 ödeyen kullanıcı, 30 kurye ve bir kurumsal pilot; BİGG+ başvurusu (Haziran 2029) için hazırlık; yıllık sızma testi düzeni.
+
+Sorumlular: CEO (proje yürütücüsü; raporlama, finansman, kapı kayıtları), CTO (teknik göstergeler, sürüm yönetimi), kurucu ortak Hamidreza Khalaj Zahraei (doğrulama sonuçlarının kapı kararlarına girdisi), akademik danışman (kapı değerlendirmelerinde yöntem görüşü).
+
+--- Yöntemler ve parametreler ---
+Kapı kararları önceden yazılmış ölçütlere göre verilir; ölçüt sağlanmazsa karar "iyileştirme" olarak kaydedilir ve kapsam daraltılır (sınırlı yayın kapsamının daraltılması, eşik yalnız belirli bölgelerde sağlanırsa ticari iddianın bu bölgelerle sınırlanması). Büyüme adımları yalnız gelir beklentisine göre değil, tutundurma, dönüşüm, birim ekonomi ve nakit pisti birlikte yeterli olduğunda atılır.
+
+Nakit planı Ek-E'deki dönemsel ödeme takvimine dayanır: personel ve SGK, yönetim ve danışmanlık, canlı trafik lisansı, pazarlama ve filo kurulumu, sunucu ve altyapı, teçhizat kalemleri aylık izlenir; taban senaryoda Ay 13–18 arasındaki aylık net çıkış 120.783–128.843 TL'dir. Ek finansman kalemleri taban projeksiyona kesin gelir olarak alınmaz.
+
+İzlenecek parametreler: kapı ölçütlerinin her biri (geçerli sürüş, MAPE, ihlal sayısı, yükleme, ödeyen kullanıcı, kurye, pilot); aylık aktif kullanıcı; ay sonu nakit ve nakit pisti (ay); müşteri edinme maliyeti; kullanıcı başına gelir; sağlayıcı gideri (rota başına); açık kritik hata sayısı; dönem raporlarının teslim tarihi.
+
+--- Deney, test ve analizler ---
+1. Kapı-1, Kapı-2 ve Kapı-3 değerlendirme toplantıları: İP-3, İP-4 ve İP-5 raporlarının ölçütlerle karşılaştırılması; yazılı karar ve gerekçe; olumsuz sonuçta uygulanan B planının kaydı.
+2. Birim ekonomi analizi (Ay 3'ten itibaren aylık): sağlayıcı faturaları ve API çağrı sayılarıyla rota başına değişken maliyetin ölçülmesi; ücretli abonelik başına katkının (model: 61,50 TL) gerçekleşen değerle karşılaştırılması.
+3. Nakit pisti analizi: aylık gerçekleşen giderin Ek-E takvimiyle karşılaştırılması; Ay 13 köprü ihtiyacının güncellenmesi.
+4. Sürüm kabul testi (Haziran 2028): kritik hata listesinin kapalı olduğunun, üç ilde canlı hizmetin ve filo panelinin çalıştığının uçtan uca doğrulanması.
+5. Ticarileşme özeti: 18 aylık ölçümlerin (doğruluk, dönüşüm, pilot sonuçları, sözleşmeler) BİGG+ başvurusu ve yatırımcı görüşmeleri için tek raporda toplanması; kanıtlanmamış iddiaların "hedef" ya da "varsayım" etiketiyle ayrılması.
+
+################################################################################
+ARA ÇIKTILAR
+################################################################################
+1. Etik kurul kararı; hukuk danışmanı incelemesinden geçmiş KVKK, aydınlatma ve onam belgeleri | 01.01.2027 – 31.03.2027
+2. Bağımsız sızma testi yeniden test yazısı: açık yüksek ve kritik bulgu 0 | 01.02.2027 – 31.03.2027
+3. Patent vekili faaliyet serbestliği görüşü ve canlı trafik sağlayıcısıyla ticari lisans | 01.01.2027 – 31.03.2027
+4. Kritik hata listesinin (Tablo J-4, Mart 2027 maddeleri) kapatılması; İstanbul Anadolu Yakası ve İzmir ağlarında kapalı beta | 01.01.2027 – 31.03.2027
+5. Zaman damgalı doğruluk protokolü (2. sürüm) ve analiz planı; imzalı pilot ön kaydı | 01.03.2027 – 30.04.2027
+6. App Store ve Google Play'de MVP yayını; ilk 1.000 yükleme; aktivasyon, 30 günlük elde tutma ve dönüşüm raporu (yetersiz örneklemde en geç 30.09.2027) | 01.04.2027 – 30.06.2027
+7. Doğruluk Raporu 1: İstanbul ve İzmir'de en az 300 geçerli sürüş, MAPE ≤%25; THS 6; yazılı Kapı-1 kararı | 01.03.2027 – 30.06.2027
+8. İmzalı kurye pilot raporu: 20 kurye, 8 hafta; durak başına mesafe ve toplam kilometre değişimi | 01.04.2027 – 30.06.2027
+9. Fiyat ve kullanım anketi raporu: en az 150 sürücü ve 100 kurye | 01.03.2027 – 30.06.2027
+10. İstanbul ve İzmir saha kalibrasyon raporu: 200 rotada 0 yasak yol ya da dönüş ihlali; hız farkı kalibrasyonu; İstanbul il geneli kapsam | 01.07.2027 – 30.09.2027
+11. Doğruluk Raporu 2: 360 geçerli sürüş, MAPE ≤%18; THS 7; yazılı Kapı-2 kararı | 01.10.2027 – 31.12.2027
+12. İlk ücretli filo sözleşmesi: en az 20 kurye, 12 ay; e-fatura | 01.07.2027 – 31.01.2028
+13. Antalya eklenmiş çok şehirli saha doğrulama raporu; etik kurula değişiklik bildirimi | 01.01.2028 – 31.03.2028
+14. Ticarileşmeye hazır ürün sürümü: Doğruluk Raporu 3 (1.000 sürüş, MAPE ≤%15), THS 8, kritik hata 0, en az 70 ödeyen kullanıcı, 30 kurye, 1 kurumsal filo ya da API pilotu; yazılı Kapı-3 kararı | 01.04.2028 – 30.06.2028
+15. TÜBİTAK dönem raporları (Ay 6, Ay 12, Ay 18) ve 18 aylık ticarileşme özeti | 01.06.2027 – 30.06.2028
